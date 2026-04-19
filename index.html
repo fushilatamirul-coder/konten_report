@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Divisi Konten</title>
+    <style>
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .sub {
+            color: #666;
+            margin-bottom: 25px;
+            border-left: 4px solid #f97316;
+            padding-left: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        th {
+            background: #f97316;
+            color: white;
+            padding: 12px 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        .task-desc {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .status-btn {
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.75rem;
+            transition: 0.2s;
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .status-btn.done {
+            background: #22c55e;
+            color: white;
+        }
+        .status-btn.notdone {
+            background: #f97316;
+            color: white;
+        }
+        .status-btn:hover {
+            opacity: 0.8;
+            transform: scale(0.97);
+        }
+        .badge {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .footer-note {
+            background: #fef2e8;
+            padding: 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            color: #7c2d12;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .hari-tanggal-table {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .hari-tanggal-table th {
+            background: #2c3e50;
+        }
+        .tanggal-hari-ini {
+            font-weight: bold;
+            color: #f97316;
+        }
+        
+        /* Style untuk menu SAVE */
+        .save-menu {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .save-info {
+            color: white;
+            font-size: 0.9rem;
+        }
+        .save-info strong {
+            font-size: 1.1rem;
+        }
+        .save-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-save {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-save:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34,197,94,0.3);
+        }
+        .btn-export {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-export:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        .btn-reset {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-reset:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        .toast-notif {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @media (max-width: 700px) {
+            th, td { font-size: 0.7rem; padding: 8px 4px; }
+            .status-btn { padding: 4px 8px; }
+            .save-menu { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 Report Divisi Konten</h1>
+    <div class="sub">✅ Klik tombol untuk ubah status: <span style="background:#22c55e; color:white; padding:2px 8px; border-radius:20px;">Sudah</span> ← → <span style="background:#f97316; color:white; padding:2px 8px; border-radius:20px;">Belum</span></div>
+
+    <!-- MENU SAVE (KOLOM BARU) -->
+    <div class="save-menu">
+        <div class="save-info">
+            <strong>💾 Menu Penyimpanan</strong><br>
+            Status tersimpan otomatis, tapi kamu juga bisa simpan manual atau export laporan
+        </div>
+        <div class="save-buttons">
+            <button class="btn-save" onclick="manualSave()">💾 Simpan Sekarang</button>
+            <button class="btn-export" onclick="exportReport()">📄 Export Laporan (TXT)</button>
+            <button class="btn-reset" onclick="resetAllData()">🔄 Reset Semua Status</button>
+        </div>
+    </div>
+
+    <!-- 1. STORY INSTAGRAM (setiap jam 07.00 - 17.00) untuk 2 akun -->
+    <h2>📸 Story Instagram (per jam)</h2>
+    <p style="font-size:0.8rem; margin-top:-10px;">Akun: Pawon Mbah Gito & Warung Mbah Uti — tiap jam 07.00 s/d 17.00</p>
+    <table id="table-story">
+        <thead>
+            <tr><th>Jam</th><th>Akun</th><th>Status</th><th>Aksi</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- 2. FEED INSTAGRAM (Selasa & Jumat) untuk 2 akun -->
+    <h2>📷 Feed Instagram</h2>
+    <p style="font-size:0.8rem; margin-top:-10px;">Setiap Selasa & Jumat (2 akun: Pawon Mbah Gito & Warung Mbah Uti)</p>
+    <table id="table-feed">
+        <thead><tr><th>Hari</th><th>Akun</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- 3. TIKTOK (Senin, Rabu, Kamis, Sabtu, Minggu) -->
+    <h2>🎵 TikTok</h2>
+    <p style="font-size:0.8rem; margin-top:-10px;">Hari: Senin, Rabu, Kamis, Sabtu, Minggu</p>
+    <table id="table-tiktok">
+        <thead><tr><th>Hari</th><th>Platform</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- TABEL KETERANGAN HARI DAN TANGGAL (DI BAGIAN BAWAH) -->
+    <h2>📅 Keterangan Hari & Tanggal</h2>
+    <table class="hari-tanggal-table" id="table-hari-tanggal">
+        <thead>
+            <tr><th>Hari</th><th>Tanggal</th><th>Keterangan</th></tr>
+        </thead>
+        <tbody id="tbody-hari-tanggal">
+            <!-- Data akan diisi oleh JavaScript secara dinamis -->
+        </tbody>
+    </table>
+
+    <div class="footer-note">
+        💾 Data tersimpan secara otomatis di localStorage browser. Refresh tetap aman.<br>
+        📌 Klik "Simpan Sekarang" untuk menyimpan manual, atau "Export Laporan" untuk mendownload file laporan.
+    </div>
+</div>
+
+<script>
+    // ---------- DATA AWAL ----------
+    // 1. Story: jam 07-17 (11 jam) x 2 akun = 22 task
+    const jamList = [];
+    for (let i = 7; i <= 17; i++) {
+        jamList.push(`${i.toString().padStart(2,'0')}:00`);
+    }
+    const akunStory = ["Pawon Mbah Gito", "Warung Mbah Uti"];
+
+    // 2. Feed: hari Selasa & Jumat, untuk 2 akun
+    const hariFeed = ["Selasa", "Jumat"];
+    const akunFeed = ["Pawon Mbah Gito", "Warung Mbah Uti"];
+
+    // 3. TikTok: hari Senin, Rabu, Kamis, Sabtu, Minggu
+    const hariTiktok = ["Senin", "Rabu", "Kamis", "Sabtu", "Minggu"];
+
+    // Key localStorage
+    const STORAGE_KEY = "report_konten_divisi";
+
+    // Inisialisasi default status (semua false = belum)
+    function getDefaultData() {
+        let data = {
+            story: {},
+            feed: {},
+            tiktok: {}
+        };
+        // story
+        for (let jam of jamList) {
+            for (let akun of akunStory) {
+                data.story[`${jam}|${akun}`] = false;
+            }
+        }
+        // feed
+        for (let hari of hariFeed) {
+            for (let akun of akunFeed) {
+                data.feed[`${hari}|${akun}`] = false;
+            }
+        }
+        // tiktok
+        for (let hari of hariTiktok) {
+            data.tiktok[`${hari}|tiktok`] = false;
+        }
+        return data;
+    }
+
+    // Load data dari localStorage atau default
+    function loadData() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                return JSON.parse(stored);
+            } catch(e) { return getDefaultData(); }
+        } else {
+            return getDefaultData();
+        }
+    }
+
+    let reportData = loadData();
+
+    function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(reportData));
+        showToast("✅ Data berhasil disimpan!", "#22c55e");
+    }
+
+    function manualSave() {
+        saveData();
+    }
+
+    function showToast(message, bgColor = "#22c55e") {
+        const toast = document.createElement("div");
+        toast.className = "toast-notif";
+        toast.textContent = message;
+        toast.style.backgroundColor = bgColor;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.remove();
+        }, 2000);
+    }
+
+    function exportReport() {
+        let reportText = "=== LAPORAN DIVISI KONTEN ===\n";
+        reportText += `Tanggal Export: ${new Date().toLocaleString('id-ID')}\n\n`;
+        
+        // Story Instagram
+        reportText += "📸 STORY INSTAGRAM (per jam 07.00-17.00)\n";
+        reportText += "Akun: Pawon Mbah Gito & Warung Mbah Uti\n";
+        for (let jam of jamList) {
+            for (let akun of akunStory) {
+                const key = `${jam}|${akun}`;
+                const isDone = reportData.story[key] || false;
+                reportText += `- ${jam} - ${akun}: ${isDone ? "✅ SUDAH" : "⏳ BELUM"}\n`;
+            }
+        }
+        
+        // Feed Instagram
+        reportText += "\n📷 FEED INSTAGRAM\n";
+        for (let hari of hariFeed) {
+            for (let akun of akunFeed) {
+                const key = `${hari}|${akun}`;
+                const isDone = reportData.feed[key] || false;
+                reportText += `- ${hari} - ${akun}: ${isDone ? "✅ SUDAH" : "⏳ BELUM"}\n`;
+            }
+        }
+        
+        // TikTok
+        reportText += "\n🎵 TIKTOK\n";
+        for (let hari of hariTiktok) {
+            const key = `${hari}|tiktok`;
+            const isDone = reportData.tiktok[key] || false;
+            reportText += `- ${hari}: ${isDone ? "✅ SUDAH" : "⏳ BELUM"}\n`;
+        }
+        
+        // Statistik
+        let totalTasks = 0;
+        let completedTasks = 0;
+        
+        for (let key in reportData.story) {
+            totalTasks++;
+            if (reportData.story[key]) completedTasks++;
+        }
+        for (let key in reportData.feed) {
+            totalTasks++;
+            if (reportData.feed[key]) completedTasks++;
+        }
+        for (let key in reportData.tiktok) {
+            totalTasks++;
+            if (reportData.tiktok[key]) completedTasks++;
+        }
+        
+        reportText += "\n📊 STATISTIK\n";
+        reportText += `Total Tugas: ${totalTasks}\n`;
+        reportText += `Tugas Selesai: ${completedTasks}\n`;
+        reportText += `Progress: ${Math.round((completedTasks/totalTasks)*100)}%\n`;
+        
+        // Download file
+        const blob = new Blob([reportText], { type: "text/plain" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = `laporan_konten_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        showToast("📄 Laporan berhasil diexport!", "#3b82f6");
+    }
+    
+    function resetAllData() {
+        if (confirm("⚠️ PERINGATAN: Ini akan mereset SEMUA status menjadi BELUM. Yakin ingin melanjutkan?")) {
+            reportData = getDefaultData();
+            saveData();
+            renderAllTables();
+            showToast("🔄 Semua status telah direset!", "#ef4444");
+        }
+    }
+
+    function toggleStatus(category, key) {
+        if (reportData[category] && reportData[category][key] !== undefined) {
+            reportData[category][key] = !reportData[category][key];
+            saveData();
+            renderAllTables();  // re-render semua tabel
+        }
+    }
+
+    // ========== FUNGSI UNTUK MENGISI TABEL HARI & TANGGAL ==========
+    function getDayNameInIndonesian(dayIndex) {
+        const hariIndonesia = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        return hariIndonesia[dayIndex];
+    }
+
+    function formatDate(date) {
+        const tgl = date.getDate().toString().padStart(2, '0');
+        const bln = (date.getMonth() + 1).toString().padStart(2, '0');
+        const thn = date.getFullYear();
+        return `${tgl}/${bln}/${thn}`;
+    }
+
+    function renderHariTanggalTable() {
+        const tbody = document.getElementById("tbody-hari-tanggal");
+        tbody.innerHTML = "";
+        
+        // Ambil tanggal hari ini
+        const today = new Date();
+        
+        // Tampilkan 7 hari ke depan (termasuk hari ini) untuk perencanaan
+        for (let i = 0; i < 7; i++) {
+            const currentDate = new Date(today);
+            currentDate.setDate(today.getDate() + i);
+            
+            const hari = getDayNameInIndonesian(currentDate.getDay());
+            const tanggal = formatDate(currentDate);
+            
+            // Tentukan keterangan berdasarkan hari
+            let keterangan = "";
+            if (hari === "Selasa" || hari === "Jumat") {
+                keterangan = "📷 Feed Instagram (2 akun)";
+            } else if (hari === "Senin" || hari === "Rabu" || hari === "Kamis" || hari === "Sabtu" || hari === "Minggu") {
+                keterangan = "🎵 Upload TikTok";
+            } else {
+                keterangan = "📸 Story Instagram (per jam)";
+            }
+            
+            // Tambahkan juga info story (setiap hari ada story)
+            if (keterangan.includes("Feed") || keterangan.includes("TikTok")) {
+                keterangan += " + 📸 Story Instagram per jam";
+            } else {
+                keterangan = "📸 Story Instagram per jam";
+            }
+            
+            // Tandai hari ini dengan style berbeda
+            const row = tbody.insertRow();
+            const cellHari = row.insertCell(0);
+            const cellTanggal = row.insertCell(1);
+            const cellKeterangan = row.insertCell(2);
+            
+            cellHari.textContent = hari;
+            cellTanggal.textContent = tanggal;
+            cellKeterangan.textContent = keterangan;
+            
+            if (i === 0) {
+                cellHari.style.fontWeight = "bold";
+                cellHari.style.color = "#f97316";
+                cellTanggal.style.fontWeight = "bold";
+                cellTanggal.style.color = "#f97316";
+                cellHari.innerHTML += " 🟢 (Hari Ini)";
+            }
+        }
+    }
+
+    // Render helper untuk tabel tugas
+    function renderStoryTable() {
+        const tbody = document.querySelector("#table-story tbody");
+        tbody.innerHTML = "";
+        for (let jam of jamList) {
+            for (let akun of akunStory) {
+                const key = `${jam}|${akun}`;
+                const isDone = reportData.story[key] || false;
+                const row = tbody.insertRow();
+                // kolom jam
+                const cellJam = row.insertCell(0);
+                cellJam.textContent = jam;
+                cellJam.style.fontWeight = "500";
+                // kolom akun
+                const cellAkun = row.insertCell(1);
+                cellAkun.textContent = akun;
+                // kolom status badge
+                const cellStatus = row.insertCell(2);
+                const statusSpan = document.createElement("span");
+                statusSpan.className = "badge";
+                statusSpan.textContent = isDone ? "✅ SUDAH" : "⏳ BELUM";
+                statusSpan.style.backgroundColor = isDone ? "#dcfce7" : "#fff3e3";
+                statusSpan.style.color = isDone ? "#166534" : "#9a3412";
+                cellStatus.appendChild(statusSpan);
+                // kolom aksi tombol
+                const cellAction = row.insertCell(3);
+                const btn = document.createElement("button");
+                btn.textContent = isDone ? "Tandai Belum" : "Tandai Selesai";
+                btn.className = "status-btn" + (isDone ? " done" : " notdone");
+                btn.onclick = (function(cat, k) { return function() { toggleStatus(cat, k); }; })("story", key);
+                cellAction.appendChild(btn);
+            }
+        }
+    }
+
+    function renderFeedTable() {
+        const tbody = document.querySelector("#table-feed tbody");
+        tbody.innerHTML = "";
+        for (let hari of hariFeed) {
+            for (let akun of akunFeed) {
+                const key = `${hari}|${akun}`;
+                const isDone = reportData.feed[key] || false;
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = hari;
+                row.insertCell(1).textContent = akun;
+                const cellStatus = row.insertCell(2);
+                const statusSpan = document.createElement("span");
+                statusSpan.className = "badge";
+                statusSpan.textContent = isDone ? "✅ SUDAH" : "⏳ BELUM";
+                statusSpan.style.backgroundColor = isDone ? "#dcfce7" : "#fff3e3";
+                cellStatus.appendChild(statusSpan);
+                const cellAction = row.insertCell(3);
+                const btn = document.createElement("button");
+                btn.textContent = isDone ? "Tandai Belum" : "Tandai Selesai";
+                btn.className = "status-btn" + (isDone ? " done" : " notdone");
+                btn.onclick = (function(cat, k) { return function() { toggleStatus(cat, k); }; })("feed", key);
+                cellAction.appendChild(btn);
+            }
+        }
+    }
+
+    function renderTiktokTable() {
+        const tbody = document.querySelector("#table-tiktok tbody");
+        tbody.innerHTML = "";
+        for (let hari of hariTiktok) {
+            const key = `${hari}|tiktok`;
+            const isDone = reportData.tiktok[key] || false;
+            const row = tbody.insertRow();
+            row.insertCell(0).textContent = hari;
+            row.insertCell(1).textContent = "TikTok";
+            const cellStatus = row.insertCell(2);
+            const statusSpan = document.createElement("span");
+            statusSpan.className = "badge";
+            statusSpan.textContent = isDone ? "✅ SUDAH" : "⏳ BELUM";
+            statusSpan.style.backgroundColor = isDone ? "#dcfce7" : "#fff3e3";
+            cellStatus.appendChild(statusSpan);
+            const cellAction = row.insertCell(3);
+            const btn = document.createElement("button");
+            btn.textContent = isDone ? "Tandai Belum" : "Tandai Selesai";
+            btn.className = "status-btn" + (isDone ? " done" : " notdone");
+            btn.onclick = (function(cat, k) { return function() { toggleStatus(cat, k); }; })("tiktok", key);
+            cellAction.appendChild(btn);
+        }
+    }
+
+    function renderAllTables() {
+        renderStoryTable();
+        renderFeedTable();
+        renderTiktokTable();
+        renderHariTanggalTable();  // Render tabel hari & tanggal
+    }
+
+    // inisialisasi render
+    renderAllTables();
+</script>
+</body>
+</html>
