@@ -47,11 +47,21 @@
         @keyframes fadeSlideUp {
             0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(24px);
             }
             100% {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(184, 122, 74, 0);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(184, 122, 74, 0.06);
             }
         }
 
@@ -82,11 +92,11 @@
             color: #f6d8b0;
             font-size: 1.4rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s;
+            transition: transform 0.25s ease;
         }
 
         .app-title-group .icon-wrapper:hover {
-            transform: scale(1.04);
+            transform: scale(1.06) rotate(-2deg);
         }
 
         .app-title-group h1 {
@@ -112,6 +122,11 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            transition: background 0.2s;
+        }
+
+        .app-title-group .sub:hover {
+            background: #e4ddd6;
         }
 
         .header-actions {
@@ -129,12 +144,13 @@
             padding: 6px 14px 6px 18px;
             border-radius: 60px;
             border: 1px solid #e4ddd6;
-            transition: border 0.2s, box-shadow 0.2s;
+            transition: border 0.2s, box-shadow 0.2s, transform 0.2s;
         }
 
         .date-picker-wrap:hover {
             border-color: #b87a4a;
-            box-shadow: 0 0 0 3px rgba(184, 122, 74, 0.08);
+            box-shadow: 0 0 0 4px rgba(184, 122, 74, 0.08);
+            transform: translateY(-1px);
         }
 
         .date-picker-wrap i {
@@ -157,6 +173,11 @@
         .date-picker-wrap input[type="date"]::-webkit-calendar-picker-indicator {
             opacity: 0.5;
             cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .date-picker-wrap input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
         }
 
         .btn {
@@ -175,15 +196,32 @@
             color: #1e1a16;
             text-decoration: none;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 60px;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         .btn:active {
             transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .btn-primary {
@@ -255,7 +293,7 @@
             background: #f0ebe5;
             padding: 4px 14px;
             border-radius: 40px;
-            transition: background 0.2s;
+            transition: all 0.25s ease;
         }
 
         .toolbar-left .badge-count i {
@@ -265,6 +303,11 @@
         .toolbar-left .badge-count.highlight {
             background: #eaf6ef;
             color: #1a5a38;
+        }
+
+        .toolbar-left .badge-count.highlight:hover {
+            background: #d4eee0;
+            transform: scale(1.02);
         }
 
         .toolbar-right {
@@ -281,19 +324,31 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 12px;
+            padding: 4px 14px;
             background: #f6f4f0;
             border-radius: 40px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
         }
 
         .save-indicator i {
             color: #2d7a4f;
+            transition: transform 0.3s;
+        }
+
+        .save-indicator.saving {
+            border-color: #b87a4a;
+            background: #fcf6ef;
         }
 
         .save-indicator.saving i {
             color: #b87a4a;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .save-indicator.saved {
+            border-color: #2d7a4f40;
+            background: #eaf6ef;
         }
 
         @keyframes spin {
@@ -311,7 +366,7 @@
             border-radius: 16px;
             border: 1px solid #ede9e3;
             background: #fcfbf9;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
         }
 
         table.laporan {
@@ -352,15 +407,56 @@
         }
 
         table.laporan tbody tr {
-            transition: background 0.15s;
+            transition: background 0.15s ease, transform 0.15s ease;
+            animation: rowAppear 0.25s ease forwards;
         }
 
         table.laporan tbody tr:hover {
             background: #faf8f5;
+            transform: scale(1.002);
         }
 
         table.laporan tbody tr:last-child td {
             border-bottom: none;
+        }
+
+        @keyframes rowAppear {
+            0% {
+                opacity: 0;
+                transform: translateX(-6px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        table.laporan tbody tr:nth-child(2) {
+            animation-delay: 0.02s;
+        }
+        table.laporan tbody tr:nth-child(3) {
+            animation-delay: 0.04s;
+        }
+        table.laporan tbody tr:nth-child(4) {
+            animation-delay: 0.06s;
+        }
+        table.laporan tbody tr:nth-child(5) {
+            animation-delay: 0.08s;
+        }
+        table.laporan tbody tr:nth-child(6) {
+            animation-delay: 0.10s;
+        }
+        table.laporan tbody tr:nth-child(7) {
+            animation-delay: 0.12s;
+        }
+        table.laporan tbody tr:nth-child(8) {
+            animation-delay: 0.14s;
+        }
+        table.laporan tbody tr:nth-child(9) {
+            animation-delay: 0.16s;
+        }
+        table.laporan tbody tr:nth-child(10) {
+            animation-delay: 0.18s;
         }
 
         /* ─── COLUMN WIDTHS ─── */
@@ -390,7 +486,7 @@
             appearance: none;
             -webkit-appearance: none;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
             width: 100%;
             max-width: 130px;
             color: #1e1a16;
@@ -400,29 +496,40 @@
         .status-select:focus {
             outline: none;
             border-color: #b87a4a;
-            box-shadow: 0 0 0 3px rgba(184, 122, 74, 0.12);
+            box-shadow: 0 0 0 4px rgba(184, 122, 74, 0.12);
         }
 
-        /* status colors */
         .status-select.status-sudah {
             border-color: #2d7a4f;
             background-color: #eaf6ef;
             color: #1a5a38;
+        }
+        .status-select.status-sudah:focus {
+            box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.15);
         }
         .status-select.status-proses {
             border-color: #b87a4a;
             background-color: #f6eee6;
             color: #8a5a2a;
         }
+        .status-select.status-proses:focus {
+            box-shadow: 0 0 0 4px rgba(184, 122, 74, 0.15);
+        }
         .status-select.status-pending {
             border-color: #d4a040;
             background-color: #fcf3e0;
             color: #8a6a20;
         }
+        .status-select.status-pending:focus {
+            box-shadow: 0 0 0 4px rgba(212, 160, 64, 0.15);
+        }
         .status-select.status-belum {
             border-color: #c4b4a8;
             background-color: #f6f4f0;
             color: #6a5a4a;
+        }
+        .status-select.status-belum:focus {
+            box-shadow: 0 0 0 4px rgba(196, 180, 168, 0.15);
         }
 
         /* ─── KETERANGAN INPUT ─── */
@@ -436,12 +543,14 @@
             color: #1e1a16;
             outline: none;
             border-bottom: 1.5px dashed transparent;
-            transition: border-color 0.2s;
+            transition: border-color 0.25s ease, background 0.2s;
             min-width: 80px;
         }
 
         .keterangan-input:focus {
             border-bottom-color: #b87a4a;
+            background: rgba(184, 122, 74, 0.04);
+            border-radius: 4px 4px 0 0;
         }
 
         .keterangan-input::placeholder {
@@ -467,6 +576,11 @@
             padding: 1px 10px;
             border-radius: 40px;
             white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .list-cell .time:hover {
+            background: #e4ddd6;
         }
 
         .list-cell .content {
@@ -517,13 +631,28 @@
             padding: 14px 16px;
             text-align: center;
             border: 1px solid #ede9e3;
-            transition: all 0.25s ease;
+            transition: all 0.3s ease;
             cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recap-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.3), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .recap-card:hover::before {
+            opacity: 1;
         }
 
         .recap-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
             border-color: #d4ccc4;
         }
 
@@ -540,7 +669,12 @@
             font-weight: 700;
             color: #1e1a16;
             line-height: 1.3;
-            transition: transform 0.2s;
+            transition: transform 0.25s ease;
+            display: inline-block;
+        }
+
+        .recap-card:hover .value {
+            transform: scale(1.06);
         }
 
         .recap-card .value.sudah {
@@ -699,16 +833,17 @@
             transform: translateX(-50%) translateY(100px);
             background: #1e1a16;
             color: #f6f4f0;
-            padding: 12px 28px;
+            padding: 12px 32px;
             border-radius: 60px;
             font-size: 0.85rem;
             font-weight: 500;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             opacity: 0;
-            transition: all 0.4s ease;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             z-index: 999;
             pointer-events: none;
             white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .toast.show {
@@ -719,45 +854,6 @@
         .toast i {
             margin-right: 10px;
             color: #f6d8b0;
-        }
-
-        /* ─── ANIMASI PADA RECAP CARD ─── */
-        .recap-card .value {
-            transition: transform 0.2s;
-        }
-        .recap-card:hover .value {
-            transform: scale(1.04);
-        }
-
-        /* ─── ANIMASI ROW BARU ─── */
-        @keyframes rowAppear {
-            0% {
-                opacity: 0;
-                transform: translateX(-6px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        table.laporan tbody tr {
-            animation: rowAppear 0.25s ease forwards;
-        }
-        table.laporan tbody tr:nth-child(2) {
-            animation-delay: 0.02s;
-        }
-        table.laporan tbody tr:nth-child(3) {
-            animation-delay: 0.04s;
-        }
-        table.laporan tbody tr:nth-child(4) {
-            animation-delay: 0.06s;
-        }
-        table.laporan tbody tr:nth-child(5) {
-            animation-delay: 0.08s;
-        }
-        /* dan seterusnya, dibatasi cukup */
-        table.laporan tbody tr {
-            animation-duration: 0.2s;
         }
 
         /* ─── FOOTER ─── */
@@ -775,6 +871,22 @@
 
         .app-footer i {
             margin-right: 4px;
+        }
+
+        /* ─── SCROLLBAR ─── */
+        .table-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f6f4f0;
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #d4ccc4;
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #b8aaa0;
         }
     </style>
 </head>
@@ -813,7 +925,7 @@
             <div class="toolbar-left">
                 <span class="badge-count"><i class="far fa-clock"></i> <span id="totalItems">38</span> item</span>
                 <span class="badge-count highlight"><i class="fas fa-check-circle"></i> <span id="countSudah">0</span> selesai</span>
-                <span class="save-indicator" id="saveIndicator"><i class="fas fa-database"></i> <span id="saveText">Tersimpan</span></span>
+                <span class="save-indicator saved" id="saveIndicator"><i class="fas fa-database"></i> <span id="saveText">Tersimpan</span></span>
             </div>
             <div class="toolbar-right">
                 <button class="btn btn-success" onclick="exportCSV()"><i class="fas fa-file-csv"></i> CSV</button>
@@ -833,7 +945,7 @@
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <!-- rows will be rendered by JS -->
+                    <!-- rows rendered by JS -->
                 </tbody>
             </table>
         </div>
@@ -907,14 +1019,14 @@
         ];
 
         const STATUS_OPTIONS = ['SUDAH', 'PROSES', 'PENDING', 'BELUM'];
-        const STORAGE_KEY = 'laporan_harian_konten_data';
+        const STORAGE_KEY = 'laporan_harian_konten_data_v2';
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  STATE
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        let currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        let allData = {}; // { '2026-07-05': [ {status, keterangan}, ... ] }
+        let currentDate = new Date().toISOString().split('T')[0];
+        let allData = {};
         let saveTimeout = null;
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -922,35 +1034,29 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         document.addEventListener('DOMContentLoaded', () => {
-            // set date picker
             const dateInput = document.getElementById('reportDate');
             dateInput.value = currentDate;
             dateInput.max = new Date().toISOString().split('T')[0];
 
-            // load from storage
             loadFromStorage();
-
-            // render
             renderTable();
-
-            // update recap
             updateRecap();
+            updateRecapDateLabel();
+            updateSaveIndicator('Tersimpan', false);
 
-            // event listeners
             dateInput.addEventListener('change', (e) => {
                 currentDate = e.target.value;
                 renderTable();
                 updateRecap();
                 updateRecapDateLabel();
-                updateSaveIndicator('Tersimpan');
+                updateSaveIndicator('Tersimpan', false);
             });
 
-            // auto-save on any change
             document.addEventListener('change', (e) => {
                 if (e.target.closest('.status-select') || e.target.closest('.keterangan-input')) {
                     saveToStorage();
                     updateRecap();
-                    updateSaveIndicator('Tersimpan');
+                    updateSaveIndicator('Tersimpan', false);
                 }
             });
 
@@ -961,12 +1067,10 @@
                     saveTimeout = setTimeout(() => {
                         saveToStorage();
                         updateRecap();
-                        updateSaveIndicator('Tersimpan');
+                        updateSaveIndicator('Tersimpan', false);
                     }, 400);
                 }
             });
-
-            updateRecapDateLabel();
         });
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -976,20 +1080,11 @@
         function loadFromStorage() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    allData = JSON.parse(raw);
-                } else {
-                    allData = {};
-                }
-            } catch (_) {
-                allData = {};
-            }
-            // ensure current date has data
+                if (raw) allData = JSON.parse(raw);
+                else allData = {};
+            } catch (_) { allData = {}; }
             if (!allData[currentDate]) {
-                allData[currentDate] = LIST_ITEMS.map(() => ({
-                    status: 'BELUM',
-                    keterangan: ''
-                }));
+                allData[currentDate] = LIST_ITEMS.map(() => ({ status: 'BELUM', keterangan: '' }));
                 saveToStorage();
             }
         }
@@ -997,15 +1092,12 @@
         function saveToStorage() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
-            } catch (_) { /* ignore */ }
+            } catch (_) {}
         }
 
         function getDayData() {
             if (!allData[currentDate]) {
-                allData[currentDate] = LIST_ITEMS.map(() => ({
-                    status: 'BELUM',
-                    keterangan: ''
-                }));
+                allData[currentDate] = LIST_ITEMS.map(() => ({ status: 'BELUM', keterangan: '' }));
                 saveToStorage();
             }
             return allData[currentDate];
@@ -1015,14 +1107,15 @@
         //  UI HELPERS
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        function updateSaveIndicator(text, saving = false) {
+        function updateSaveIndicator(text, saving) {
             const el = document.getElementById('saveIndicator');
             const span = document.getElementById('saveText');
             span.textContent = text;
+            el.className = 'save-indicator';
             if (saving) {
                 el.classList.add('saving');
             } else {
-                el.classList.remove('saving');
+                el.classList.add('saved');
             }
         }
 
@@ -1039,8 +1132,6 @@
                 const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
                 const status = row.status || 'BELUM';
                 const keterangan = row.keterangan || '';
-
-                // status class for styling
                 const statusClass = 'status-' + status.toLowerCase();
 
                 html += `
@@ -1068,7 +1159,6 @@
 
             tbody.innerHTML = html;
 
-            // attach events
             tbody.querySelectorAll('.status-select').forEach(sel => {
                 sel.addEventListener('change', (e) => {
                     const idx = parseInt(e.target.dataset.index);
@@ -1078,7 +1168,7 @@
                         e.target.className = 'status-select status-' + e.target.value.toLowerCase();
                         saveToStorage();
                         updateRecap();
-                        updateSaveIndicator('Tersimpan');
+                        updateSaveIndicator('Tersimpan', false);
                     }
                 });
             });
@@ -1091,12 +1181,11 @@
                         dayData2[idx].keterangan = e.target.value;
                         saveToStorage();
                         updateRecap();
-                        updateSaveIndicator('Tersimpan');
+                        updateSaveIndicator('Tersimpan', false);
                     }
                 });
             });
 
-            // update total items badge
             document.getElementById('totalItems').textContent = LIST_ITEMS.length;
         }
 
@@ -1128,7 +1217,6 @@
             const total = dayData.length;
             const persen = total > 0 ? Math.round((countSudah / total) * 100) : 0;
 
-            // animate value changes
             animateValue('rSudah', countSudah);
             animateValue('rProses', countProses);
             animateValue('rPending', countPending);
@@ -1143,8 +1231,8 @@
             const oldVal = parseInt(el.textContent) || 0;
             if (oldVal !== newVal) {
                 el.textContent = newVal;
-                el.style.transform = 'scale(1.15)';
-                setTimeout(() => { el.style.transform = 'scale(1)'; }, 200);
+                el.style.transform = 'scale(1.18)';
+                setTimeout(() => { el.style.transform = 'scale(1)'; }, 220);
             }
         }
 
@@ -1160,14 +1248,11 @@
 
         function resetToday() {
             if (!confirm('Reset semua status & keterangan untuk hari ini?')) return;
-            allData[currentDate] = LIST_ITEMS.map(() => ({
-                status: 'BELUM',
-                keterangan: ''
-            }));
+            allData[currentDate] = LIST_ITEMS.map(() => ({ status: 'BELUM', keterangan: '' }));
             saveToStorage();
             renderTable();
             updateRecap();
-            updateSaveIndicator('Tersimpan');
+            updateSaveIndicator('Tersimpan', false);
             showToast('Hari ini telah direset');
         }
 
@@ -1177,7 +1262,7 @@
 
         function exportCSV() {
             const dayData = getDayData();
-            let csv = '\uFEFF'; // BOM for Excel
+            let csv = '\uFEFF';
             csv += 'STATUS,LIST,KETERANGAN\n';
 
             LIST_ITEMS.forEach((item, idx) => {
@@ -1188,19 +1273,19 @@
                 csv += `${status},"${label}",${ket}\n`;
             });
 
-            // recap
-            csv += '\n--- REKAP ---\n';
             const rSudah = document.getElementById('rSudah').textContent;
             const rProses = document.getElementById('rProses').textContent;
             const rPending = document.getElementById('rPending').textContent;
             const rBelum = document.getElementById('rBelum').textContent;
             const rTotal = document.getElementById('rTotal').textContent;
             const rPersen = document.getElementById('rPersen').textContent;
+
+            csv += '\n--- REKAP HARIAN ---\n';
             csv += `SUDAH,${rSudah}\n`;
             csv += `PROSES,${rProses}\n`;
             csv += `PENDING,${rPending}\n`;
             csv += `BELUM,${rBelum}\n`;
-            csv += `Total,${rTotal}\n`;
+            csv += `Total Item,${rTotal}\n`;
             csv += `Penyelesaian,${rPersen}\n`;
 
             downloadFile(csv, `laporan_harian_${currentDate}.csv`, 'text/csv;charset=utf-8');
@@ -1208,7 +1293,7 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  EXPORT: PDF (diperbaiki dengan rekap di bawah)
+        //  EXPORT: PDF — RECAP TANPA EMOJI, RAPI
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportPDF() {
@@ -1216,7 +1301,7 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
 
-            // header
+            // HEADER
             doc.setFontSize(16);
             doc.setTextColor(30, 26, 22);
             doc.text('Laporan Harian Konten - Pawon Mbah Gito', 14, 20);
@@ -1227,7 +1312,7 @@
             doc.setTextColor(100, 90, 80);
             doc.text(`Tanggal: ${dateStr}`, 14, 28);
 
-            // table data
+            // TABEL UTAMA
             const tableData = LIST_ITEMS.map((item, idx) => {
                 const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
                 return [
@@ -1238,9 +1323,7 @@
             });
 
             doc.autoTable({
-                head: [
-                    ['STATUS', 'LIST', 'KETERANGAN']
-                ],
+                head: [['STATUS', 'LIST', 'KETERANGAN']],
                 body: tableData,
                 startY: 34,
                 styles: { fontSize: 8, cellPadding: 3 },
@@ -1251,7 +1334,6 @@
                     2: { cellWidth: 70 }
                 },
                 didDrawPage: function(data) {
-                    // footer
                     const pageCount = doc.internal.getNumberOfPages();
                     doc.setFontSize(8);
                     doc.setTextColor(150, 140, 130);
@@ -1259,11 +1341,16 @@
                 }
             });
 
-            // ─── REKAP setelah tabel ───
-            const finalY = doc.lastAutoTable.finalY + 10;
-            doc.setFontSize(12);
+            // ─── REKAP (tanpa emoji) ───
+            const finalY = doc.lastAutoTable.finalY + 12;
+
+            // garis pemisah
+            doc.setDrawColor(200, 195, 190);
+            doc.line(14, finalY - 6, doc.internal.pageSize.width - 14, finalY - 6);
+
+            doc.setFontSize(14);
             doc.setTextColor(30, 26, 22);
-            doc.text('📊 REKAP HARIAN', 14, finalY);
+            doc.text('REKAP HARIAN', 14, finalY + 2);
 
             const rSudah = document.getElementById('rSudah').textContent;
             const rProses = document.getElementById('rProses').textContent;
@@ -1273,17 +1360,17 @@
             const rPersen = document.getElementById('rPersen').textContent;
 
             const recapRows = [
-                ['✅ SUDAH', rSudah],
-                ['🔄 PROSES', rProses],
-                ['⏳ PENDING', rPending],
-                ['⬜ BELUM', rBelum],
-                ['📊 Total Item', rTotal],
-                ['🎯 Penyelesaian', rPersen]
+                ['SUDAH', rSudah],
+                ['PROSES', rProses],
+                ['PENDING', rPending],
+                ['BELUM', rBelum],
+                ['Total Item', rTotal],
+                ['Penyelesaian', rPersen]
             ];
 
             doc.autoTable({
                 body: recapRows,
-                startY: finalY + 6,
+                startY: finalY + 8,
                 styles: { fontSize: 10, cellPadding: 5 },
                 columnStyles: {
                     0: { cellWidth: 60, fontStyle: 'bold' },
@@ -1300,11 +1387,11 @@
             });
 
             doc.save(`laporan_harian_${currentDate}.pdf`);
-            showToast('PDF berhasil diekspor');
+            showToast('PDF berhasil diekspor (rekap tanpa emoji)');
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  EXPORT: Spreadsheet (XLS-like via HTML table)
+        //  EXPORT: Spreadsheet
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportSpreadsheet() {
@@ -1326,6 +1413,7 @@
                     .status-proses { background: #f6eee6; }
                     .status-pending { background: #fcf3e0; }
                     .status-belum { background: #f6f4f0; }
+                    .recap-title { background: #ede9e3; font-weight: bold; }
                 </style>
                 </head><body>
                 <h2>Laporan Harian Konten - Pawon Mbah Gito</h2>
@@ -1349,7 +1437,6 @@
                 `;
             });
 
-            // recap
             const rSudah = document.getElementById('rSudah').textContent;
             const rProses = document.getElementById('rProses').textContent;
             const rPending = document.getElementById('rPending').textContent;
@@ -1361,15 +1448,15 @@
                     </tbody>
                 </table>
                 <br/>
-                <h3>📊 Rekap Harian</h3>
+                <h3>REKAP HARIAN</h3>
                 <table>
                     <tr><th>Kategori</th><th>Jumlah</th></tr>
-                    <tr><td>✅ SUDAH</td><td>${rSudah}</td></tr>
-                    <tr><td>🔄 PROSES</td><td>${rProses}</td></tr>
-                    <tr><td>⏳ PENDING</td><td>${rPending}</td></tr>
-                    <tr><td>⬜ BELUM</td><td>${rBelum}</td></tr>
-                    <tr><td>📊 Total Item</td><td>${rTotal}</td></tr>
-                    <tr><td>🎯 Penyelesaian</td><td>${rPersen}</td></tr>
+                    <tr><td>SUDAH</td><td>${rSudah}</td></tr>
+                    <tr><td>PROSES</td><td>${rProses}</td></tr>
+                    <tr><td>PENDING</td><td>${rPending}</td></tr>
+                    <tr><td>BELUM</td><td>${rBelum}</td></tr>
+                    <tr><td>Total Item</td><td>${rTotal}</td></tr>
+                    <tr><td>Penyelesaian</td><td>${rPersen}</td></tr>
                 </table>
                 <br/>
                 <p><em>Dibuat pada: ${new Date().toLocaleString('id-ID')}</em></p>
@@ -1409,10 +1496,9 @@
             document.getElementById('toastMsg').textContent = msg;
             el.classList.add('show');
             clearTimeout(window._toastTimer);
-            window._toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+            window._toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
         }
 
-        // expose to global for inline onclick
         window.resetToday = resetToday;
         window.exportCSV = exportCSV;
         window.exportPDF = exportPDF;
