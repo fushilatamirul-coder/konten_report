@@ -16,6 +16,7 @@
     </script>
 
     <style>
+        /* ─── RESET & BASE ─── */
         * {
             margin: 0;
             padding: 0;
@@ -1274,8 +1275,7 @@
         function resetContentList() {
             listItems = DEFAULT_ITEMS.map(item => ({ ...item }));
             saveContentList();
-            allData = {};
-            saveToStorage();
+            // Data harian tetap dipertahankan, akan disesuaikan saat render
             renderTable();
             updateRecap();
             showToast('Konten telah direset ke default');
@@ -1305,6 +1305,7 @@
                 allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
                 saveToStorage();
             }
+            // Pastikan jumlah data harian sesuai dengan listItems
             while (allData[currentDate].length < listItems.length) {
                 allData[currentDate].push({ status: 'BELUM', keterangan: '' });
             }
@@ -1534,7 +1535,7 @@
         }
 
         function resetAllContent() {
-            if (!confirm('Kembalikan semua konten ke daftar default? Semua perubahan konten akan hilang.')) return;
+            if (!confirm('Kembalikan semua konten ke daftar default? Perubahan konten akan hilang, tetapi data harian tetap tersimpan.')) return;
             resetContentList();
         }
 
@@ -1803,7 +1804,7 @@
             window._toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
         }
 
-        // Expose
+        // Expose functions
         window.resetToday = resetToday;
         window.resetAllContent = resetAllContent;
         window.exportCSV = exportCSV;
