@@ -29,6 +29,7 @@
             color: #1e1a16;
             min-height: 100vh;
             padding: 1.5rem;
+            background-image: radial-gradient(ellipse at 10% 20%, rgba(184, 122, 74, 0.06) 0%, transparent 60%);
         }
 
         /* ─── APP CONTAINER ─── */
@@ -36,10 +37,22 @@
             max-width: 1440px;
             margin: 0 auto;
             background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.02);
             padding: 2rem 2rem 2.5rem;
             border: 1px solid #ede9e3;
+            animation: fadeSlideUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ─── HEADER ─── */
@@ -59,15 +72,21 @@
         }
 
         .app-title-group .icon-wrapper {
-            width: 44px;
-            height: 44px;
-            background: #1e1a16;
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(145deg, #1e1a16, #3a2e26);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #f6d8b0;
-            font-size: 1.25rem;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s;
+        }
+
+        .app-title-group .icon-wrapper:hover {
+            transform: scale(1.04);
         }
 
         .app-title-group h1 {
@@ -87,9 +106,12 @@
             font-weight: 500;
             color: #8a7a6a;
             background: #f0ebe5;
-            padding: 2px 12px;
+            padding: 2px 14px;
             border-radius: 40px;
             margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .header-actions {
@@ -107,6 +129,12 @@
             padding: 6px 14px 6px 18px;
             border-radius: 60px;
             border: 1px solid #e4ddd6;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .date-picker-wrap:hover {
+            border-color: #b87a4a;
+            box-shadow: 0 0 0 3px rgba(184, 122, 74, 0.08);
         }
 
         .date-picker-wrap i {
@@ -135,7 +163,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 18px;
+            padding: 8px 20px;
             border-radius: 60px;
             font-family: 'Inter', sans-serif;
             font-size: 0.8rem;
@@ -146,11 +174,16 @@
             background: #f0ebe5;
             color: #1e1a16;
             text-decoration: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
 
         .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn-primary {
@@ -222,6 +255,16 @@
             background: #f0ebe5;
             padding: 4px 14px;
             border-radius: 40px;
+            transition: background 0.2s;
+        }
+
+        .toolbar-left .badge-count i {
+            margin-right: 4px;
+        }
+
+        .toolbar-left .badge-count.highlight {
+            background: #eaf6ef;
+            color: #1a5a38;
         }
 
         .toolbar-right {
@@ -231,12 +274,44 @@
             gap: 8px;
         }
 
+        /* ─── SAVE INDICATOR ─── */
+        .save-indicator {
+            font-size: 0.7rem;
+            color: #8a7a6a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: #f6f4f0;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+
+        .save-indicator i {
+            color: #2d7a4f;
+        }
+
+        .save-indicator.saving i {
+            color: #b87a4a;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         /* ─── TABLE WRAPPER ─── */
         .table-scroll {
             overflow-x: auto;
             border-radius: 16px;
             border: 1px solid #ede9e3;
             background: #fcfbf9;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
         }
 
         table.laporan {
@@ -274,6 +349,10 @@
 
         table.laporan tbody td:not(:last-child) {
             border-right: 1px solid #f0ebe5;
+        }
+
+        table.laporan tbody tr {
+            transition: background 0.15s;
         }
 
         table.laporan tbody tr:hover {
@@ -438,6 +517,14 @@
             padding: 14px 16px;
             text-align: center;
             border: 1px solid #ede9e3;
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+
+        .recap-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            border-color: #d4ccc4;
         }
 
         .recap-card .label {
@@ -453,6 +540,7 @@
             font-weight: 700;
             color: #1e1a16;
             line-height: 1.3;
+            transition: transform 0.2s;
         }
 
         .recap-card .value.sudah {
@@ -466,6 +554,28 @@
         }
         .recap-card .value.belum {
             color: #8a7a6a;
+        }
+
+        .recap-card.dark {
+            background: #1e1a16;
+            border-color: #1e1a16;
+        }
+        .recap-card.dark .label {
+            color: #b8aaa0;
+        }
+        .recap-card.dark .value {
+            color: #f6f4f0;
+        }
+
+        .recap-card.accent {
+            background: #eaf6ef;
+            border-color: #2d7a4f;
+        }
+        .recap-card.accent .label {
+            color: #1a5a38;
+        }
+        .recap-card.accent .value {
+            color: #1a5a38;
         }
 
         /* ─── RESPONSIVE ─── */
@@ -610,6 +720,62 @@
             margin-right: 10px;
             color: #f6d8b0;
         }
+
+        /* ─── ANIMASI PADA RECAP CARD ─── */
+        .recap-card .value {
+            transition: transform 0.2s;
+        }
+        .recap-card:hover .value {
+            transform: scale(1.04);
+        }
+
+        /* ─── ANIMASI ROW BARU ─── */
+        @keyframes rowAppear {
+            0% {
+                opacity: 0;
+                transform: translateX(-6px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        table.laporan tbody tr {
+            animation: rowAppear 0.25s ease forwards;
+        }
+        table.laporan tbody tr:nth-child(2) {
+            animation-delay: 0.02s;
+        }
+        table.laporan tbody tr:nth-child(3) {
+            animation-delay: 0.04s;
+        }
+        table.laporan tbody tr:nth-child(4) {
+            animation-delay: 0.06s;
+        }
+        table.laporan tbody tr:nth-child(5) {
+            animation-delay: 0.08s;
+        }
+        /* dan seterusnya, dibatasi cukup */
+        table.laporan tbody tr {
+            animation-duration: 0.2s;
+        }
+
+        /* ─── FOOTER ─── */
+        .app-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #b8aaa0;
+            border-top: 1px solid #ede9e3;
+            padding-top: 1rem;
+        }
+
+        .app-footer i {
+            margin-right: 4px;
+        }
     </style>
 </head>
 <body>
@@ -646,7 +812,8 @@
         <div class="toolbar">
             <div class="toolbar-left">
                 <span class="badge-count"><i class="far fa-clock"></i> <span id="totalItems">38</span> item</span>
-                <span class="badge-count" style="background:#eaf6ef;color:#1a5a38;"><i class="fas fa-check-circle"></i> <span id="countSudah">0</span> selesai</span>
+                <span class="badge-count highlight"><i class="fas fa-check-circle"></i> <span id="countSudah">0</span> selesai</span>
+                <span class="save-indicator" id="saveIndicator"><i class="fas fa-database"></i> <span id="saveText">Tersimpan</span></span>
             </div>
             <div class="toolbar-right">
                 <button class="btn btn-success" onclick="exportCSV()"><i class="fas fa-file-csv"></i> CSV</button>
@@ -682,21 +849,15 @@
                 <div class="recap-card"><div class="label">🔄 PROSES</div><div class="value proses" id="rProses">0</div></div>
                 <div class="recap-card"><div class="label">⏳ PENDING</div><div class="value pending" id="rPending">0</div></div>
                 <div class="recap-card"><div class="label">⬜ BELUM</div><div class="value belum" id="rBelum">0</div></div>
-                <div class="recap-card" style="background:#1e1a16;border-color:#1e1a16;">
-                    <div class="label" style="color:#b8aaa0;">📊 Total Item</div>
-                    <div class="value" style="color:#f6f4f0;" id="rTotal">0</div>
-                </div>
-                <div class="recap-card" style="background:#eaf6ef;border-color:#2d7a4f;">
-                    <div class="label" style="color:#1a5a38;">🎯 Penyelesaian</div>
-                    <div class="value sudah" id="rPersen">0%</div>
-                </div>
+                <div class="recap-card dark"><div class="label">📊 Total Item</div><div class="value" id="rTotal">0</div></div>
+                <div class="recap-card accent"><div class="label">🎯 Penyelesaian</div><div class="value" id="rPersen">0%</div></div>
             </div>
         </div>
 
         <!-- FOOTER -->
-        <div style="margin-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:0.7rem;color:#b8aaa0;border-top:1px solid #ede9e3;padding-top:1rem;">
+        <div class="app-footer">
             <span><i class="fas fa-database"></i> Data tersimpan otomatis di peramban Anda.</span>
-            <span><i class="fas fa-print"></i> Klik <strong>CSV</strong> atau <strong>PDF</strong> untuk ekspor.</span>
+            <span><i class="fas fa-print"></i> Klik <strong>CSV</strong>, <strong>PDF</strong>, atau <strong>Spreadsheet</strong> untuk ekspor.</span>
         </div>
     </div>
 
@@ -754,6 +915,7 @@
 
         let currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
         let allData = {}; // { '2026-07-05': [ {status, keterangan}, ... ] }
+        let saveTimeout = null;
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  INIT
@@ -780,23 +942,26 @@
                 renderTable();
                 updateRecap();
                 updateRecapDateLabel();
+                updateSaveIndicator('Tersimpan');
             });
 
-            // auto-save on any change (debounced via events)
+            // auto-save on any change
             document.addEventListener('change', (e) => {
                 if (e.target.closest('.status-select') || e.target.closest('.keterangan-input')) {
                     saveToStorage();
                     updateRecap();
+                    updateSaveIndicator('Tersimpan');
                 }
             });
 
             document.addEventListener('input', (e) => {
                 if (e.target.closest('.keterangan-input')) {
-                    // save after typing (debounced)
-                    clearTimeout(window._saveTimeout);
-                    window._saveTimeout = setTimeout(() => {
+                    clearTimeout(saveTimeout);
+                    updateSaveIndicator('Menyimpan...', true);
+                    saveTimeout = setTimeout(() => {
                         saveToStorage();
                         updateRecap();
+                        updateSaveIndicator('Tersimpan');
                     }, 400);
                 }
             });
@@ -833,8 +998,6 @@
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
             } catch (_) { /* ignore */ }
-            // update count badge
-            updateRecap();
         }
 
         function getDayData() {
@@ -846,6 +1009,21 @@
                 saveToStorage();
             }
             return allData[currentDate];
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  UI HELPERS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function updateSaveIndicator(text, saving = false) {
+            const el = document.getElementById('saveIndicator');
+            const span = document.getElementById('saveText');
+            span.textContent = text;
+            if (saving) {
+                el.classList.add('saving');
+            } else {
+                el.classList.remove('saving');
+            }
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -897,10 +1075,10 @@
                     const dayData2 = getDayData();
                     if (dayData2[idx]) {
                         dayData2[idx].status = e.target.value;
-                        // update class
                         e.target.className = 'status-select status-' + e.target.value.toLowerCase();
                         saveToStorage();
                         updateRecap();
+                        updateSaveIndicator('Tersimpan');
                     }
                 });
             });
@@ -913,6 +1091,7 @@
                         dayData2[idx].keterangan = e.target.value;
                         saveToStorage();
                         updateRecap();
+                        updateSaveIndicator('Tersimpan');
                     }
                 });
             });
@@ -949,13 +1128,24 @@
             const total = dayData.length;
             const persen = total > 0 ? Math.round((countSudah / total) * 100) : 0;
 
-            document.getElementById('rSudah').textContent = countSudah;
-            document.getElementById('rProses').textContent = countProses;
-            document.getElementById('rPending').textContent = countPending;
-            document.getElementById('rBelum').textContent = countBelum;
-            document.getElementById('rTotal').textContent = total;
+            // animate value changes
+            animateValue('rSudah', countSudah);
+            animateValue('rProses', countProses);
+            animateValue('rPending', countPending);
+            animateValue('rBelum', countBelum);
+            animateValue('rTotal', total);
             document.getElementById('rPersen').textContent = persen + '%';
             document.getElementById('countSudah').textContent = countSudah;
+        }
+
+        function animateValue(id, newVal) {
+            const el = document.getElementById(id);
+            const oldVal = parseInt(el.textContent) || 0;
+            if (oldVal !== newVal) {
+                el.textContent = newVal;
+                el.style.transform = 'scale(1.15)';
+                setTimeout(() => { el.style.transform = 'scale(1)'; }, 200);
+            }
         }
 
         function updateRecapDateLabel() {
@@ -977,6 +1167,7 @@
             saveToStorage();
             renderTable();
             updateRecap();
+            updateSaveIndicator('Tersimpan');
             showToast('Hari ini telah direset');
         }
 
@@ -1017,7 +1208,7 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  EXPORT: PDF (menggunakan jsPDF + autoTable)
+        //  EXPORT: PDF (diperbaiki dengan rekap di bawah)
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportPDF() {
@@ -1068,9 +1259,9 @@
                 }
             });
 
-            // recap after table
-            const finalY = doc.lastAutoTable.finalY + 8;
-            doc.setFontSize(11);
+            // ─── REKAP setelah tabel ───
+            const finalY = doc.lastAutoTable.finalY + 10;
+            doc.setFontSize(12);
             doc.setTextColor(30, 26, 22);
             doc.text('📊 REKAP HARIAN', 14, finalY);
 
@@ -1092,13 +1283,14 @@
 
             doc.autoTable({
                 body: recapRows,
-                startY: finalY + 4,
-                styles: { fontSize: 9, cellPadding: 4 },
+                startY: finalY + 6,
+                styles: { fontSize: 10, cellPadding: 5 },
                 columnStyles: {
                     0: { cellWidth: 60, fontStyle: 'bold' },
                     1: { cellWidth: 30, halign: 'center' }
                 },
-                theme: 'plain',
+                theme: 'striped',
+                headStyles: { fillColor: [240, 235, 229], textColor: [30, 26, 22], fontStyle: 'bold' },
                 didDrawPage: function(data) {
                     const pageCount = doc.internal.getNumberOfPages();
                     doc.setFontSize(8);
