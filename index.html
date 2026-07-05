@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laporan Harian Konten · Pawon Mbah Gito</title>
 
-    <!-- Font Awesome 6 -->
+    <!-- Font Awesome 6 (stabil) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
-    <!-- jsPDF + AutoTable -->
+    <!-- jsPDF + AutoTable (versi terbaru stabil) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js">
@@ -497,7 +497,6 @@
         }
 
         /* ─── WARNA STATUS ─── */
-        /* SUDAH → Hijau */
         .status-select.status-sudah {
             border-color: #2d7a4f;
             background-color: #e8f5e9;
@@ -507,7 +506,6 @@
             box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.2);
         }
 
-        /* BELUM → Merah */
         .status-select.status-belum {
             border-color: #c62828;
             background-color: #ffebee;
@@ -517,7 +515,6 @@
             box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.2);
         }
 
-        /* PENDING → Kuning */
         .status-select.status-pending {
             border-color: #f9a825;
             background-color: #fff8e1;
@@ -527,7 +524,6 @@
             box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.25);
         }
 
-        /* PROSES → Biru */
         .status-select.status-proses {
             border-color: #1565c0;
             background-color: #e3f2fd;
@@ -537,7 +533,6 @@
             box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.2);
         }
 
-        /* PRIORITAS → Abu-abu */
         .status-select.status-prioritas {
             border-color: #616161;
             background-color: #f5f5f5;
@@ -1197,7 +1192,7 @@
         //  INIT
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             const dateInput = document.getElementById('reportDate');
             dateInput.value = currentDate;
             dateInput.max = new Date().toISOString().split('T')[0];
@@ -1209,7 +1204,7 @@
             updateRecapDateLabel();
             updateSaveIndicator('Tersimpan', false);
 
-            dateInput.addEventListener('change', (e) => {
+            dateInput.addEventListener('change', function(e) {
                 const newDate = e.target.value;
                 if (newDate) {
                     currentDate = newDate;
@@ -1221,28 +1216,29 @@
                 }
             });
 
-            document.addEventListener('change', (e) => {
+            // Event listener untuk perubahan status & keterangan
+            document.addEventListener('change', function(e) {
                 if (e.target.closest('.status-select') || e.target.closest('.keterangan-input')) {
                     saveCurrentData();
                 }
             });
 
-            document.addEventListener('input', (e) => {
+            document.addEventListener('input', function(e) {
                 if (e.target.closest('.keterangan-input')) {
                     clearTimeout(saveTimeout);
                     updateSaveIndicator('Menyimpan...', true);
-                    saveTimeout = setTimeout(() => {
+                    saveTimeout = setTimeout(function() {
                         saveCurrentData();
                     }, 400);
                 }
             });
 
-            document.getElementById('editContentInput').addEventListener('keydown', (e) => {
+            document.getElementById('editContentInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') saveEditContent();
                 if (e.key === 'Escape') closeEditModal();
             });
 
-            document.getElementById('editModal').addEventListener('click', (e) => {
+            document.getElementById('editModal').addEventListener('click', function(e) {
                 if (e.target === e.currentTarget) closeEditModal();
             });
         });
@@ -1262,7 +1258,7 @@
                     }
                 }
             } catch (_) { /* ignore */ }
-            listItems = DEFAULT_ITEMS.map(item => ({ ...item }));
+            listItems = DEFAULT_ITEMS.map(function(item) { return { ...item }; });
             saveContentList();
         }
 
@@ -1273,9 +1269,9 @@
         }
 
         function resetContentList() {
-            listItems = DEFAULT_ITEMS.map(item => ({ ...item }));
+            listItems = DEFAULT_ITEMS.map(function(item) { return { ...item }; });
             saveContentList();
-            // Data harian tetap dipertahankan, akan disesuaikan saat render
+            // Data harian tetap dipertahankan, hanya konten yang direset
             renderTable();
             updateRecap();
             showToast('Konten telah direset ke default');
@@ -1289,7 +1285,7 @@
             } catch (_) { allData = {}; }
 
             if (!allData[currentDate]) {
-                allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
+                allData[currentDate] = listItems.map(function() { return { status: 'BELUM', keterangan: '' }; });
                 saveToStorage();
             }
         }
@@ -1302,7 +1298,7 @@
 
         function getDayData() {
             if (!allData[currentDate]) {
-                allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
+                allData[currentDate] = listItems.map(function() { return { status: 'BELUM', keterangan: '' }; });
                 saveToStorage();
             }
             // Pastikan jumlah data harian sesuai dengan listItems
@@ -1316,14 +1312,14 @@
         }
 
         function saveCurrentData() {
-            const tbody = document.getElementById('tableBody');
-            const rows = tbody.querySelectorAll('tr');
-            const dayData = getDayData();
+            var tbody = document.getElementById('tableBody');
+            var rows = tbody.querySelectorAll('tr');
+            var dayData = getDayData();
 
-            rows.forEach((row, idx) => {
+            rows.forEach(function(row, idx) {
                 if (idx >= dayData.length) return;
-                const statusSelect = row.querySelector('.status-select');
-                const keteranganInput = row.querySelector('.keterangan-input');
+                var statusSelect = row.querySelector('.status-select');
+                var keteranganInput = row.querySelector('.keterangan-input');
                 if (statusSelect) {
                     dayData[idx].status = statusSelect.value;
                 }
@@ -1342,8 +1338,8 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function updateSaveIndicator(text, saving) {
-            const el = document.getElementById('saveIndicator');
-            const span = document.getElementById('saveText');
+            var el = document.getElementById('saveIndicator');
+            var span = document.getElementById('saveText');
             span.textContent = text;
             el.className = 'save-indicator';
             if (saving) {
@@ -1358,38 +1354,38 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            const dayData = getDayData();
-            let html = '';
+            var tbody = document.getElementById('tableBody');
+            var dayData = getDayData();
+            var html = '';
 
-            listItems.forEach((item, idx) => {
-                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
-                const status = row.status || 'BELUM';
-                const keterangan = row.keterangan || '';
-                const statusClass = 'status-' + status.toLowerCase();
+            listItems.forEach(function(item, idx) {
+                var row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                var status = row.status || 'BELUM';
+                var keterangan = row.keterangan || '';
+                var statusClass = 'status-' + status.toLowerCase();
 
-                let platformClass = '';
-                let badgeHtml = '';
+                var platformClass = '';
+                var badgeHtml = '';
                 if (item.platform === 'tiktok') {
                     platformClass = 'platform-tiktok';
-                    badgeHtml = `<span class="platform-badge tiktok"><i class="fab fa-tiktok"></i> TikTok</span>`;
+                    badgeHtml = '<span class="platform-badge tiktok"><i class="fab fa-tiktok"></i> TikTok</span>';
                 } else if (item.platform === 'feed') {
                     platformClass = 'platform-feed';
-                    badgeHtml = `<span class="platform-badge feed"><i class="fab fa-instagram"></i> Feed</span>`;
+                    badgeHtml = '<span class="platform-badge feed"><i class="fab fa-instagram"></i> Feed</span>';
                 } else if (item.platform === 'youtube') {
                     platformClass = 'platform-youtube';
-                    badgeHtml = `<span class="platform-badge youtube"><i class="fab fa-youtube"></i> Shorts</span>`;
+                    badgeHtml = '<span class="platform-badge youtube"><i class="fab fa-youtube"></i> Shorts</span>';
                 }
 
-                const content = item.content || '';
+                var content = item.content || '';
 
                 html += `
                     <tr class="${platformClass}">
                         <td class="col-status">
                             <select class="status-select ${statusClass}" data-index="${idx}" aria-label="Status untuk ${item.time} - ${content}">
-                                ${STATUS_OPTIONS.map(opt =>
-                                    `<option value="${opt}" ${opt === status ? 'selected' : ''}>${opt}</option>`
-                                ).join('')}
+                                ${STATUS_OPTIONS.map(function(opt) {
+                                    return '<option value="' + opt + '" ' + (opt === status ? 'selected' : '') + '>' + opt + '</option>';
+                                }).join('')}
                             </select>
                         </td>
                         <td class="col-list">
@@ -1417,7 +1413,7 @@
         }
 
         function escapeHtml(str) {
-            const div = document.createElement('div');
+            var div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
         }
@@ -1428,13 +1424,13 @@
 
         function openEditModal(index) {
             editIndex = index;
-            const item = listItems[index];
+            var item = listItems[index];
             if (!item) return;
 
             document.getElementById('editTimeLabel').textContent = item.time;
             document.getElementById('editContentInput').value = item.content || '';
             document.getElementById('editModal').classList.add('active');
-            setTimeout(() => {
+            setTimeout(function() {
                 document.getElementById('editContentInput').focus();
                 document.getElementById('editContentInput').select();
             }, 100);
@@ -1447,8 +1443,8 @@
 
         function saveEditContent() {
             if (editIndex < 0 || editIndex >= listItems.length) return;
-            const input = document.getElementById('editContentInput');
-            const newContent = input.value.trim();
+            var input = document.getElementById('editContentInput');
+            var newContent = input.value.trim();
             if (!newContent) {
                 showToast('Konten tidak boleh kosong!');
                 return;
@@ -1457,7 +1453,7 @@
             listItems[editIndex].content = newContent;
             saveContentList();
 
-            const dayData = getDayData();
+            var dayData = getDayData();
             while (dayData.length < listItems.length) {
                 dayData.push({ status: 'BELUM', keterangan: '' });
             }
@@ -1475,15 +1471,15 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function updateRecap() {
-            const dayData = getDayData();
-            let countSudah = 0,
+            var dayData = getDayData();
+            var countSudah = 0,
                 countProses = 0,
                 countPending = 0,
                 countBelum = 0,
                 countPrioritas = 0;
 
-            dayData.forEach(row => {
-                const s = (row.status || 'BELUM').toUpperCase();
+            dayData.forEach(function(row) {
+                var s = (row.status || 'BELUM').toUpperCase();
                 if (s === 'SUDAH') countSudah++;
                 else if (s === 'PROSES') countProses++;
                 else if (s === 'PENDING') countPending++;
@@ -1491,8 +1487,8 @@
                 else countBelum++;
             });
 
-            const total = dayData.length;
-            const persen = total > 0 ? Math.round((countSudah / total) * 100) : 0;
+            var total = dayData.length;
+            var persen = total > 0 ? Math.round((countSudah / total) * 100) : 0;
 
             animateValue('rSudah', countSudah);
             animateValue('rProses', countProses);
@@ -1505,18 +1501,18 @@
         }
 
         function animateValue(id, newVal) {
-            const el = document.getElementById(id);
-            const oldVal = parseInt(el.textContent) || 0;
+            var el = document.getElementById(id);
+            var oldVal = parseInt(el.textContent) || 0;
             if (oldVal !== newVal) {
                 el.textContent = newVal;
                 el.style.transform = 'scale(1.18)';
-                setTimeout(() => { el.style.transform = 'scale(1)'; }, 220);
+                setTimeout(function() { el.style.transform = 'scale(1)'; }, 220);
             }
         }
 
         function updateRecapDateLabel() {
-            const d = new Date(currentDate + 'T00:00:00');
-            const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            var d = new Date(currentDate + 'T00:00:00');
+            var opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('recapDateLabel').textContent = d.toLocaleDateString('id-ID', opts);
         }
 
@@ -1526,7 +1522,7 @@
 
         function resetToday() {
             if (!confirm('Reset semua status & keterangan untuk hari ini?')) return;
-            allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
+            allData[currentDate] = listItems.map(function() { return { status: 'BELUM', keterangan: '' }; });
             saveToStorage();
             renderTable();
             updateRecap();
@@ -1544,39 +1540,39 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportCSV() {
-            const dayData = getDayData();
-            let csv = '\uFEFF';
+            var dayData = getDayData();
+            var csv = '\uFEFF';
             csv += 'STATUS,LIST,KETERANGAN\n';
 
-            listItems.forEach((item, idx) => {
-                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
-                const status = row.status || 'BELUM';
-                const ket = (row.keterangan || '').replace(/,/g, ';');
-                let label = `${item.time} - ${item.content}`;
+            listItems.forEach(function(item, idx) {
+                var row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                var status = row.status || 'BELUM';
+                var ket = (row.keterangan || '').replace(/,/g, ';');
+                var label = item.time + ' - ' + item.content;
                 if (item.platform) {
-                    label += ` [${item.platform.toUpperCase()}]`;
+                    label += ' [' + item.platform.toUpperCase() + ']';
                 }
-                csv += `${status},"${label}",${ket}\n`;
+                csv += status + ',"' + label + '",' + ket + '\n';
             });
 
-            const rSudah = document.getElementById('rSudah').textContent;
-            const rProses = document.getElementById('rProses').textContent;
-            const rPending = document.getElementById('rPending').textContent;
-            const rBelum = document.getElementById('rBelum').textContent;
-            const rPrioritas = document.getElementById('rPrioritas').textContent;
-            const rTotal = document.getElementById('rTotal').textContent;
-            const rPersen = document.getElementById('rPersen').textContent;
+            var rSudah = document.getElementById('rSudah').textContent;
+            var rProses = document.getElementById('rProses').textContent;
+            var rPending = document.getElementById('rPending').textContent;
+            var rBelum = document.getElementById('rBelum').textContent;
+            var rPrioritas = document.getElementById('rPrioritas').textContent;
+            var rTotal = document.getElementById('rTotal').textContent;
+            var rPersen = document.getElementById('rPersen').textContent;
 
             csv += '\n--- REKAP HARIAN ---\n';
-            csv += `SUDAH,${rSudah}\n`;
-            csv += `PROSES,${rProses}\n`;
-            csv += `PENDING,${rPending}\n`;
-            csv += `BELUM,${rBelum}\n`;
-            csv += `PRIORITAS,${rPrioritas}\n`;
-            csv += `Total Item,${rTotal}\n`;
-            csv += `Penyelesaian,${rPersen}\n`;
+            csv += 'SUDAH,' + rSudah + '\n';
+            csv += 'PROSES,' + rProses + '\n';
+            csv += 'PENDING,' + rPending + '\n';
+            csv += 'BELUM,' + rBelum + '\n';
+            csv += 'PRIORITAS,' + rPrioritas + '\n';
+            csv += 'Total Item,' + rTotal + '\n';
+            csv += 'Penyelesaian,' + rPersen + '\n';
 
-            downloadFile(csv, `laporan_harian_${currentDate}.csv`, 'text/csv;charset=utf-8');
+            downloadFile(csv, 'laporan_harian_' + currentDate + '.csv', 'text/csv;charset=utf-8');
             showToast('CSV berhasil diekspor');
         }
 
@@ -1585,25 +1581,25 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportPDF() {
-            const dayData = getDayData();
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4');
+            var dayData = getDayData();
+            var { jsPDF } = window.jspdf;
+            var doc = new jsPDF('l', 'mm', 'a4');
 
             doc.setFontSize(16);
             doc.setTextColor(30, 26, 22);
             doc.text('Laporan Harian Konten - Pawon Mbah Gito', 14, 20);
 
-            const d = new Date(currentDate + 'T00:00:00');
-            const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            var d = new Date(currentDate + 'T00:00:00');
+            var dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
             doc.setFontSize(11);
             doc.setTextColor(100, 90, 80);
-            doc.text(`Tanggal: ${dateStr}`, 14, 28);
+            doc.text('Tanggal: ' + dateStr, 14, 28);
 
-            const tableData = listItems.map((item, idx) => {
-                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
-                let listLabel = `${item.time} - ${item.content}`;
+            var tableData = listItems.map(function(item, idx) {
+                var row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                var listLabel = item.time + ' - ' + item.content;
                 if (item.platform) {
-                    listLabel += ` [${item.platform.toUpperCase()}]`;
+                    listLabel += ' [' + item.platform.toUpperCase() + ']';
                 }
                 return [
                     row.status || 'BELUM',
@@ -1626,14 +1622,14 @@
                     2: { cellWidth: 70 }
                 },
                 didDrawPage: function(data) {
-                    const pageCount = doc.internal.getNumberOfPages();
+                    var pageCount = doc.internal.getNumberOfPages();
                     doc.setFontSize(8);
                     doc.setTextColor(150, 140, 130);
-                    doc.text(`Halaman ${data.pageNumber} dari ${pageCount}`, 14, doc.internal.pageSize.height - 8);
+                    doc.text('Halaman ' + data.pageNumber + ' dari ' + pageCount, 14, doc.internal.pageSize.height - 8);
                 }
             });
 
-            const finalY = doc.lastAutoTable.finalY + 12;
+            var finalY = doc.lastAutoTable.finalY + 12;
             doc.setDrawColor(200, 195, 190);
             doc.line(14, finalY - 6, doc.internal.pageSize.width - 14, finalY - 6);
 
@@ -1641,15 +1637,15 @@
             doc.setTextColor(30, 26, 22);
             doc.text('REKAP HARIAN', 14, finalY + 2);
 
-            const rSudah = document.getElementById('rSudah').textContent;
-            const rProses = document.getElementById('rProses').textContent;
-            const rPending = document.getElementById('rPending').textContent;
-            const rBelum = document.getElementById('rBelum').textContent;
-            const rPrioritas = document.getElementById('rPrioritas').textContent;
-            const rTotal = document.getElementById('rTotal').textContent;
-            const rPersen = document.getElementById('rPersen').textContent;
+            var rSudah = document.getElementById('rSudah').textContent;
+            var rProses = document.getElementById('rProses').textContent;
+            var rPending = document.getElementById('rPending').textContent;
+            var rBelum = document.getElementById('rBelum').textContent;
+            var rPrioritas = document.getElementById('rPrioritas').textContent;
+            var rTotal = document.getElementById('rTotal').textContent;
+            var rPersen = document.getElementById('rPersen').textContent;
 
-            const recapRows = [
+            var recapRows = [
                 ['SUDAH', rSudah],
                 ['PROSES', rProses],
                 ['PENDING', rPending],
@@ -1670,14 +1666,14 @@
                 theme: 'striped',
                 headStyles: { fillColor: [240, 235, 229], textColor: [30, 26, 22], fontStyle: 'bold' },
                 didDrawPage: function(data) {
-                    const pageCount = doc.internal.getNumberOfPages();
+                    var pageCount = doc.internal.getNumberOfPages();
                     doc.setFontSize(8);
                     doc.setTextColor(150, 140, 130);
-                    doc.text(`Halaman ${data.pageNumber} dari ${pageCount}`, 14, doc.internal.pageSize.height - 8);
+                    doc.text('Halaman ' + data.pageNumber + ' dari ' + pageCount, 14, doc.internal.pageSize.height - 8);
                 }
             });
 
-            doc.save(`laporan_harian_${currentDate}.pdf`);
+            doc.save('laporan_harian_' + currentDate + '.pdf');
             showToast('PDF berhasil diekspor');
         }
 
@@ -1686,9 +1682,9 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportSpreadsheet() {
-            const dayData = getDayData();
+            var dayData = getDayData();
 
-            let html = `
+            var html = `
                 <html xmlns:o="urn:schemas-microsoft-com:office:office"
                       xmlns:x="urn:schemas-microsoft-com:office:excel"
                       xmlns="http://www.w3.org/TR/REC-html40">
@@ -1717,16 +1713,16 @@
                     <tbody>
             `;
 
-            listItems.forEach((item, idx) => {
-                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
-                const status = row.status || 'BELUM';
-                const ket = (row.keterangan || '');
-                let cls = 'status-' + status.toLowerCase();
-                let listLabel = `${item.time} - ${item.content}`;
+            listItems.forEach(function(item, idx) {
+                var row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                var status = row.status || 'BELUM';
+                var ket = (row.keterangan || '');
+                var cls = 'status-' + status.toLowerCase();
+                var listLabel = item.time + ' - ' + item.content;
                 if (item.platform) {
-                    listLabel += ` [${item.platform.toUpperCase()}]`;
+                    listLabel += ' [' + item.platform.toUpperCase() + ']';
                 }
-                let platformCls = '';
+                var platformCls = '';
                 if (item.platform === 'tiktok') platformCls = 'platform-tiktok';
                 else if (item.platform === 'feed') platformCls = 'platform-feed';
                 else if (item.platform === 'youtube') platformCls = 'platform-youtube';
@@ -1740,13 +1736,13 @@
                 `;
             });
 
-            const rSudah = document.getElementById('rSudah').textContent;
-            const rProses = document.getElementById('rProses').textContent;
-            const rPending = document.getElementById('rPending').textContent;
-            const rBelum = document.getElementById('rBelum').textContent;
-            const rPrioritas = document.getElementById('rPrioritas').textContent;
-            const rTotal = document.getElementById('rTotal').textContent;
-            const rPersen = document.getElementById('rPersen').textContent;
+            var rSudah = document.getElementById('rSudah').textContent;
+            var rProses = document.getElementById('rProses').textContent;
+            var rPending = document.getElementById('rPending').textContent;
+            var rBelum = document.getElementById('rBelum').textContent;
+            var rPrioritas = document.getElementById('rPrioritas').textContent;
+            var rTotal = document.getElementById('rTotal').textContent;
+            var rPersen = document.getElementById('rPersen').textContent;
 
             html += `
                     </tbody>
@@ -1768,11 +1764,11 @@
                 </body></html>
             `;
 
-            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            var blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
             a.href = url;
-            a.download = `laporan_harian_${currentDate}.xls`;
+            a.download = 'laporan_harian_' + currentDate + '.xls';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1785,9 +1781,9 @@
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function downloadFile(content, filename, mime) {
-            const blob = new Blob([content], { type: mime });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            var blob = new Blob([content], { type: mime });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
             a.href = url;
             a.download = filename;
             document.body.appendChild(a);
@@ -1797,14 +1793,14 @@
         }
 
         function showToast(msg) {
-            const el = document.getElementById('toast');
+            var el = document.getElementById('toast');
             document.getElementById('toastMsg').textContent = msg;
             el.classList.add('show');
             clearTimeout(window._toastTimer);
-            window._toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+            window._toastTimer = setTimeout(function() { el.classList.remove('show'); }, 2400);
         }
 
-        // Expose functions
+        // Expose functions ke global scope agar dapat dipanggil dari HTML
         window.resetToday = resetToday;
         window.resetAllContent = resetAllContent;
         window.exportCSV = exportCSV;
