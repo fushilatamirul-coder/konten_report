@@ -404,6 +404,7 @@
             }
         }
 
+        /* Platform colors */
         tr.platform-tiktok {
             background: #fce4ec !important;
             border-left: 4px solid #e57373;
@@ -452,7 +453,7 @@
         }
 
         .col-status {
-            width: 130px;
+            width: 140px;
             min-width: 120px;
         }
         .col-list {
@@ -469,13 +470,14 @@
             text-align: center;
         }
 
+        /* ─── STATUS DROPDOWN ─── */
         .status-select {
             font-family: 'Inter', sans-serif;
             font-size: 0.75rem;
             font-weight: 600;
             padding: 5px 10px 5px 32px;
             border-radius: 40px;
-            border: 1.5px solid #e4ddd6;
+            border: 2px solid #d4ccc4;
             background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 8"><path fill="%238a7a6a" d="M6 8L0 0h12z"/></svg>') no-repeat right 10px center;
             background-size: 10px;
             appearance: none;
@@ -483,36 +485,65 @@
             cursor: pointer;
             transition: all 0.2s ease;
             width: 100%;
-            max-width: 130px;
+            max-width: 140px;
             color: #1e1a16;
             background-color: #fff;
         }
 
         .status-select:focus {
             outline: none;
-            border-color: #b87a4a;
-            box-shadow: 0 0 0 4px rgba(184, 122, 74, 0.12);
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
         }
 
+        /* ─── WARNA STATUS ─── */
+        /* SUDAH → Hijau */
         .status-select.status-sudah {
             border-color: #2d7a4f;
-            background-color: #eaf6ef;
+            background-color: #e8f5e9;
             color: #1a5a38;
         }
-        .status-select.status-proses {
-            border-color: #b87a4a;
-            background-color: #f6eee6;
-            color: #8a5a2a;
+        .status-select.status-sudah:focus {
+            box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.2);
         }
-        .status-select.status-pending {
-            border-color: #d4a040;
-            background-color: #fcf3e0;
-            color: #8a6a20;
-        }
+
+        /* BELUM → Merah */
         .status-select.status-belum {
-            border-color: #c4b4a8;
-            background-color: #f6f4f0;
-            color: #6a5a4a;
+            border-color: #c62828;
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+        .status-select.status-belum:focus {
+            box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.2);
+        }
+
+        /* PENDING → Kuning */
+        .status-select.status-pending {
+            border-color: #f9a825;
+            background-color: #fff8e1;
+            color: #e65100;
+        }
+        .status-select.status-pending:focus {
+            box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.25);
+        }
+
+        /* PROSES → Biru */
+        .status-select.status-proses {
+            border-color: #1565c0;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+        .status-select.status-proses:focus {
+            box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.2);
+        }
+
+        /* PRIORITAS → Abu-abu */
+        .status-select.status-prioritas {
+            border-color: #616161;
+            background-color: #f5f5f5;
+            color: #424242;
+        }
+        .status-select.status-prioritas:focus {
+            box-shadow: 0 0 0 4px rgba(97, 97, 97, 0.2);
         }
 
         .keterangan-input {
@@ -700,7 +731,7 @@
 
         .recap-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 12px;
             margin-bottom: 1.5rem;
         }
@@ -708,7 +739,7 @@
         .recap-card {
             background: #f6f4f0;
             border-radius: 16px;
-            padding: 14px 16px;
+            padding: 12px 10px;
             text-align: center;
             border: 1px solid #ede9e3;
             transition: all 0.3s ease;
@@ -737,15 +768,15 @@
         }
 
         .recap-card .label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.3px;
             color: #8a7a6a;
             font-weight: 600;
         }
 
         .recap-card .value {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #1e1a16;
             line-height: 1.3;
@@ -761,13 +792,16 @@
             color: #2d7a4f;
         }
         .recap-card .value.proses {
-            color: #b87a4a;
+            color: #1565c0;
         }
         .recap-card .value.pending {
-            color: #d4a040;
+            color: #f9a825;
         }
         .recap-card .value.belum {
-            color: #8a7a6a;
+            color: #c62828;
+        }
+        .recap-card .value.prioritas {
+            color: #616161;
         }
 
         .recap-card.dark {
@@ -885,7 +919,7 @@
                 justify-content: center;
             }
             .recap-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
             table.laporan {
                 font-size: 0.72rem;
@@ -1083,9 +1117,10 @@
             </div>
             <div class="recap-grid" id="recapGrid">
                 <div class="recap-card"><div class="label">✅ SUDAH</div><div class="value sudah" id="rSudah">0</div></div>
-                <div class="recap-card"><div class="label">🔄 PROSES</div><div class="value proses" id="rProses">0</div></div>
-                <div class="recap-card"><div class="label">⏳ PENDING</div><div class="value pending" id="rPending">0</div></div>
-                <div class="recap-card"><div class="label">⬜ BELUM</div><div class="value belum" id="rBelum">0</div></div>
+                <div class="recap-card"><div class="label">🔵 PROSES</div><div class="value proses" id="rProses">0</div></div>
+                <div class="recap-card"><div class="label">🟡 PENDING</div><div class="value pending" id="rPending">0</div></div>
+                <div class="recap-card"><div class="label">🔴 BELUM</div><div class="value belum" id="rBelum">0</div></div>
+                <div class="recap-card" style="background:#f5f5f5;border-color:#bdbdbd;"><div class="label">⬜ PRIORITAS</div><div class="value prioritas" id="rPrioritas">0</div></div>
                 <div class="recap-card dark"><div class="label">📊 Total Item</div><div class="value" id="rTotal">0</div></div>
                 <div class="recap-card accent"><div class="label">🎯 Penyelesaian</div><div class="value" id="rPersen">0%</div></div>
             </div>
@@ -1100,7 +1135,7 @@
 
     <script>
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  DATA DEFINISI — DEFAULT
+        //  DATA DEFINISI
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         const DEFAULT_ITEMS = [
@@ -1143,8 +1178,8 @@
             { time: '16.00', content: 'Moment Kebersamaan / Drone suasana Pawon Mbah Gito', platform: 'youtube' }
         ];
 
-        const STATUS_OPTIONS = ['SUDAH', 'PROSES', 'PENDING', 'BELUM'];
-        const STORAGE_KEY = 'laporan_harian_konten_data_v3';
+        const STATUS_OPTIONS = ['SUDAH', 'PROSES', 'PENDING', 'BELUM', 'PRIORITAS'];
+        const STORAGE_KEY = 'laporan_harian_konten_data_v4';
         const CONTENT_KEY = 'laporan_harian_konten_list';
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1153,7 +1188,7 @@
 
         let currentDate = new Date().toISOString().split('T')[0];
         let allData = {};
-        let listItems = []; // array { time, content, platform? }
+        let listItems = [];
         let saveTimeout = null;
         let editIndex = -1;
 
@@ -1201,20 +1236,18 @@
                 }
             });
 
-            // Modal Enter key
             document.getElementById('editContentInput').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') saveEditContent();
                 if (e.key === 'Escape') closeEditModal();
             });
 
-            // Close modal on overlay click
             document.getElementById('editModal').addEventListener('click', (e) => {
                 if (e.target === e.currentTarget) closeEditModal();
             });
         });
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  CONTENT LIST STORAGE
+        //  STORAGE
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function loadContentList() {
@@ -1228,7 +1261,6 @@
                     }
                 }
             } catch (_) { /* ignore */ }
-            // fallback ke default
             listItems = DEFAULT_ITEMS.map(item => ({ ...item }));
             saveContentList();
         }
@@ -1242,17 +1274,12 @@
         function resetContentList() {
             listItems = DEFAULT_ITEMS.map(item => ({ ...item }));
             saveContentList();
-            // Reset data harian juga karena konten berubah
             allData = {};
             saveToStorage();
             renderTable();
             updateRecap();
             showToast('Konten telah direset ke default');
         }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  STORAGE DATA HARIAN
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function loadFromStorage() {
             try {
@@ -1278,7 +1305,6 @@
                 allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
                 saveToStorage();
             }
-            // Jika jumlah item berubah (misal setelah reset), sesuaikan
             while (allData[currentDate].length < listItems.length) {
                 allData[currentDate].push({ status: 'BELUM', keterangan: '' });
             }
@@ -1427,14 +1453,10 @@
                 return;
             }
 
-            // Update listItems
             listItems[editIndex].content = newContent;
             saveContentList();
 
-            // Update data harian jika ada perubahan jumlah item (tidak berubah)
-            // Tapi kita perlu pastikan data harian sinkron
             const dayData = getDayData();
-            // Jika data harian lebih pendek dari listItems, tambahkan
             while (dayData.length < listItems.length) {
                 dayData.push({ status: 'BELUM', keterangan: '' });
             }
@@ -1456,13 +1478,15 @@
             let countSudah = 0,
                 countProses = 0,
                 countPending = 0,
-                countBelum = 0;
+                countBelum = 0,
+                countPrioritas = 0;
 
             dayData.forEach(row => {
                 const s = (row.status || 'BELUM').toUpperCase();
                 if (s === 'SUDAH') countSudah++;
                 else if (s === 'PROSES') countProses++;
                 else if (s === 'PENDING') countPending++;
+                else if (s === 'PRIORITAS') countPrioritas++;
                 else countBelum++;
             });
 
@@ -1473,6 +1497,7 @@
             animateValue('rProses', countProses);
             animateValue('rPending', countPending);
             animateValue('rBelum', countBelum);
+            animateValue('rPrioritas', countPrioritas);
             animateValue('rTotal', total);
             document.getElementById('rPersen').textContent = persen + '%';
             document.getElementById('countSudah').textContent = countSudah;
@@ -1537,6 +1562,7 @@
             const rProses = document.getElementById('rProses').textContent;
             const rPending = document.getElementById('rPending').textContent;
             const rBelum = document.getElementById('rBelum').textContent;
+            const rPrioritas = document.getElementById('rPrioritas').textContent;
             const rTotal = document.getElementById('rTotal').textContent;
             const rPersen = document.getElementById('rPersen').textContent;
 
@@ -1545,6 +1571,7 @@
             csv += `PROSES,${rProses}\n`;
             csv += `PENDING,${rPending}\n`;
             csv += `BELUM,${rBelum}\n`;
+            csv += `PRIORITAS,${rPrioritas}\n`;
             csv += `Total Item,${rTotal}\n`;
             csv += `Penyelesaian,${rPersen}\n`;
 
@@ -1617,6 +1644,7 @@
             const rProses = document.getElementById('rProses').textContent;
             const rPending = document.getElementById('rPending').textContent;
             const rBelum = document.getElementById('rBelum').textContent;
+            const rPrioritas = document.getElementById('rPrioritas').textContent;
             const rTotal = document.getElementById('rTotal').textContent;
             const rPersen = document.getElementById('rPersen').textContent;
 
@@ -1625,6 +1653,7 @@
                 ['PROSES', rProses],
                 ['PENDING', rPending],
                 ['BELUM', rBelum],
+                ['PRIORITAS', rPrioritas],
                 ['Total Item', rTotal],
                 ['Penyelesaian', rPersen]
             ];
@@ -1634,7 +1663,7 @@
                 startY: finalY + 8,
                 styles: { fontSize: 10, cellPadding: 5 },
                 columnStyles: {
-                    0: { cellWidth: 60, fontStyle: 'bold' },
+                    0: { cellWidth: 50, fontStyle: 'bold' },
                     1: { cellWidth: 30, halign: 'center' }
                 },
                 theme: 'striped',
@@ -1670,10 +1699,11 @@
                     table { border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11px; }
                     th { background: #1e1a16; color: #fff; font-weight: bold; padding: 8px 12px; border: 1px solid #333; }
                     td { padding: 6px 12px; border: 1px solid #ccc; }
-                    .status-sudah { background: #eaf6ef; }
-                    .status-proses { background: #f6eee6; }
-                    .status-pending { background: #fcf3e0; }
-                    .status-belum { background: #f6f4f0; }
+                    .status-sudah { background: #e8f5e9; }
+                    .status-proses { background: #e3f2fd; }
+                    .status-pending { background: #fff8e1; }
+                    .status-belum { background: #ffebee; }
+                    .status-prioritas { background: #f5f5f5; }
                     .platform-tiktok td:first-child { background: #fce4ec; }
                     .platform-feed td:first-child { background: #e8f5e9; }
                     .platform-youtube td:first-child { background: #e3f2fd; }
@@ -1713,6 +1743,7 @@
             const rProses = document.getElementById('rProses').textContent;
             const rPending = document.getElementById('rPending').textContent;
             const rBelum = document.getElementById('rBelum').textContent;
+            const rPrioritas = document.getElementById('rPrioritas').textContent;
             const rTotal = document.getElementById('rTotal').textContent;
             const rPersen = document.getElementById('rPersen').textContent;
 
@@ -1727,6 +1758,7 @@
                     <tr><td>PROSES</td><td>${rProses}</td></tr>
                     <tr><td>PENDING</td><td>${rPending}</td></tr>
                     <tr><td>BELUM</td><td>${rBelum}</td></tr>
+                    <tr><td>PRIORITAS</td><td>${rPrioritas}</td></tr>
                     <tr><td>Total Item</td><td>${rTotal}</td></tr>
                     <tr><td>Penyelesaian</td><td>${rPersen}</td></tr>
                 </table>
