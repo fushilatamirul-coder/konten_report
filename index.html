@@ -9,14 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
-    <!-- jsPDF for PDF export -->
+    <!-- jsPDF + AutoTable -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js">
     </script>
 
     <style>
-        /* ─── RESET & BASE ─── */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +31,6 @@
             background-image: radial-gradient(ellipse at 10% 20%, rgba(184, 122, 74, 0.06) 0%, transparent 60%);
         }
 
-        /* ─── APP CONTAINER ─── */
         .app-container {
             max-width: 1440px;
             margin: 0 auto;
@@ -55,17 +53,6 @@
             }
         }
 
-        @keyframes pulseGlow {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(184, 122, 74, 0);
-            }
-            50% {
-                box-shadow: 0 0 0 6px rgba(184, 122, 74, 0.06);
-            }
-        }
-
-        /* ─── HEADER ─── */
         .app-header {
             display: flex;
             flex-wrap: wrap;
@@ -257,17 +244,11 @@
             background: #9e6639;
         }
 
-        .btn-danger-outline {
-            background: transparent;
-            border: 1px solid #d4ccc4;
-            color: #b34a4a;
-        }
-        .btn-danger-outline:hover {
-            background: #fdf0f0;
-            border-color: #b34a4a;
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.7rem;
         }
 
-        /* ─── TOOLBAR ─── */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -305,11 +286,6 @@
             color: #1a5a38;
         }
 
-        .toolbar-left .badge-count.highlight:hover {
-            background: #d4eee0;
-            transform: scale(1.02);
-        }
-
         .toolbar-right {
             display: flex;
             flex-wrap: wrap;
@@ -317,7 +293,6 @@
             gap: 8px;
         }
 
-        /* ─── SAVE INDICATOR ─── */
         .save-indicator {
             font-size: 0.7rem;
             color: #8a7a6a;
@@ -360,7 +335,6 @@
             }
         }
 
-        /* ─── TABLE WRAPPER ─── */
         .table-scroll {
             overflow-x: auto;
             border-radius: 16px;
@@ -373,7 +347,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.82rem;
-            min-width: 720px;
+            min-width: 820px;
         }
 
         table.laporan thead th {
@@ -413,7 +387,6 @@
 
         table.laporan tbody tr:hover {
             background: #faf8f5;
-            transform: scale(1.002);
         }
 
         table.laporan tbody tr:last-child td {
@@ -431,49 +404,71 @@
             }
         }
 
-        table.laporan tbody tr:nth-child(2) {
-            animation-delay: 0.02s;
+        tr.platform-tiktok {
+            background: #fce4ec !important;
+            border-left: 4px solid #e57373;
         }
-        table.laporan tbody tr:nth-child(3) {
-            animation-delay: 0.04s;
-        }
-        table.laporan tbody tr:nth-child(4) {
-            animation-delay: 0.06s;
-        }
-        table.laporan tbody tr:nth-child(5) {
-            animation-delay: 0.08s;
-        }
-        table.laporan tbody tr:nth-child(6) {
-            animation-delay: 0.10s;
-        }
-        table.laporan tbody tr:nth-child(7) {
-            animation-delay: 0.12s;
-        }
-        table.laporan tbody tr:nth-child(8) {
-            animation-delay: 0.14s;
-        }
-        table.laporan tbody tr:nth-child(9) {
-            animation-delay: 0.16s;
-        }
-        table.laporan tbody tr:nth-child(10) {
-            animation-delay: 0.18s;
+        tr.platform-tiktok:hover {
+            background: #f8d7db !important;
         }
 
-        /* ─── COLUMN WIDTHS ─── */
+        tr.platform-feed {
+            background: #e8f5e9 !important;
+            border-left: 4px solid #81c784;
+        }
+        tr.platform-feed:hover {
+            background: #d4edda !important;
+        }
+
+        tr.platform-youtube {
+            background: #e3f2fd !important;
+            border-left: 4px solid #64b5f6;
+        }
+        tr.platform-youtube:hover {
+            background: #d4e8fa !important;
+        }
+
+        .platform-badge {
+            display: inline-block;
+            font-size: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 2px 10px;
+            border-radius: 40px;
+            margin-left: 8px;
+            color: #fff;
+            background: #8a7a6a;
+        }
+
+        .platform-badge.tiktok {
+            background: #e57373;
+        }
+        .platform-badge.feed {
+            background: #66bb6a;
+        }
+        .platform-badge.youtube {
+            background: #42a5f5;
+        }
+
         .col-status {
             width: 130px;
             min-width: 120px;
         }
         .col-list {
             width: auto;
-            min-width: 300px;
+            min-width: 320px;
         }
         .col-keterangan {
-            width: 260px;
-            min-width: 180px;
+            width: 240px;
+            min-width: 160px;
+        }
+        .col-edit {
+            width: 50px;
+            min-width: 50px;
+            text-align: center;
         }
 
-        /* ─── STATUS DROPDOWN ─── */
         .status-select {
             font-family: 'Inter', sans-serif;
             font-size: 0.75rem;
@@ -504,35 +499,22 @@
             background-color: #eaf6ef;
             color: #1a5a38;
         }
-        .status-select.status-sudah:focus {
-            box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.15);
-        }
         .status-select.status-proses {
             border-color: #b87a4a;
             background-color: #f6eee6;
             color: #8a5a2a;
-        }
-        .status-select.status-proses:focus {
-            box-shadow: 0 0 0 4px rgba(184, 122, 74, 0.15);
         }
         .status-select.status-pending {
             border-color: #d4a040;
             background-color: #fcf3e0;
             color: #8a6a20;
         }
-        .status-select.status-pending:focus {
-            box-shadow: 0 0 0 4px rgba(212, 160, 64, 0.15);
-        }
         .status-select.status-belum {
             border-color: #c4b4a8;
             background-color: #f6f4f0;
             color: #6a5a4a;
         }
-        .status-select.status-belum:focus {
-            box-shadow: 0 0 0 4px rgba(196, 180, 168, 0.15);
-        }
 
-        /* ─── KETERANGAN INPUT ─── */
         .keterangan-input {
             width: 100%;
             border: none;
@@ -559,10 +541,9 @@
             font-weight: 400;
         }
 
-        /* ─── LIST COLUMN ─── */
         .list-cell {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 8px;
             flex-wrap: wrap;
         }
@@ -576,20 +557,119 @@
             padding: 1px 10px;
             border-radius: 40px;
             white-space: nowrap;
-            transition: background 0.2s;
         }
 
-        .list-cell .time:hover {
-            background: #e4ddd6;
-        }
-
-        .list-cell .content {
+        .list-cell .content-text {
             font-weight: 500;
             color: #1e1a16;
             font-size: 0.78rem;
+            word-break: break-word;
         }
 
-        /* ─── RECAP SECTION ─── */
+        .btn-edit {
+            background: transparent;
+            border: none;
+            color: #b8aaa0;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .btn-edit:hover {
+            color: #b87a4a;
+            background: #f0ebe5;
+            transform: scale(1.1);
+        }
+
+        /* ─── MODAL EDIT ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2rem 2rem 1.8rem;
+            max-width: 560px;
+            width: 92%;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px) scale(0.96);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-box h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1e1a16;
+        }
+
+        .modal-box .sub {
+            font-size: 0.8rem;
+            color: #8a7a6a;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-box label {
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #8a7a6a;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .modal-box input[type="text"] {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #e4ddd6;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #fcfbf9;
+            color: #1e1a16;
+        }
+
+        .modal-box input[type="text"]:focus {
+            outline: none;
+            border-color: #b87a4a;
+            box-shadow: 0 0 0 4px rgba(184, 122, 74, 0.08);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .modal-actions .btn {
+            padding: 8px 24px;
+        }
+
         .recap-section {
             margin-top: 2rem;
             padding-top: 1.5rem;
@@ -712,7 +792,67 @@
             color: #1a5a38;
         }
 
-        /* ─── RESPONSIVE ─── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e1a16;
+            color: #f6f4f0;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 999;
+            pointer-events: none;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast i {
+            margin-right: 10px;
+            color: #f6d8b0;
+        }
+
+        .app-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #b8aaa0;
+            border-top: 1px solid #ede9e3;
+            padding-top: 1rem;
+        }
+
+        .app-footer i {
+            margin-right: 4px;
+        }
+
+        .table-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f6f4f0;
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #d4ccc4;
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #b8aaa0;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 0.75rem;
@@ -749,27 +889,39 @@
             }
             table.laporan {
                 font-size: 0.72rem;
-                min-width: 560px;
+                min-width: 640px;
             }
             .col-status {
                 width: 100px;
                 min-width: 90px;
             }
             .col-keterangan {
-                width: 140px;
-                min-width: 120px;
+                width: 130px;
+                min-width: 100px;
+            }
+            .col-edit {
+                width: 40px;
+                min-width: 40px;
             }
             .list-cell .time {
                 font-size: 0.6rem;
                 padding: 1px 8px;
             }
-            .list-cell .content {
+            .list-cell .content-text {
                 font-size: 0.7rem;
             }
             .status-select {
                 font-size: 0.65rem;
                 padding: 4px 8px 4px 26px;
                 max-width: 100px;
+            }
+            .platform-badge {
+                font-size: 0.5rem;
+                padding: 1px 8px;
+                margin-left: 4px;
+            }
+            .modal-box {
+                padding: 1.5rem 1.2rem;
             }
         }
 
@@ -797,96 +949,51 @@
                 font-size: 1.3rem;
             }
             table.laporan {
-                font-size: 0.65rem;
-                min-width: 480px;
+                font-size: 0.62rem;
+                min-width: 520px;
             }
             .col-status {
-                width: 80px;
-                min-width: 70px;
+                width: 75px;
+                min-width: 65px;
             }
             .col-keterangan {
-                width: 100px;
-                min-width: 80px;
+                width: 90px;
+                min-width: 70px;
+            }
+            .col-edit {
+                width: 34px;
+                min-width: 34px;
             }
             .status-select {
-                font-size: 0.6rem;
+                font-size: 0.55rem;
                 padding: 3px 6px 3px 20px;
-                max-width: 80px;
+                max-width: 70px;
             }
             .list-cell .time {
-                font-size: 0.55rem;
+                font-size: 0.5rem;
                 padding: 1px 6px;
             }
-            .list-cell .content {
-                font-size: 0.62rem;
+            .list-cell .content-text {
+                font-size: 0.58rem;
             }
             .keterangan-input {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
             }
-        }
-
-        /* ─── TOAST ─── */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #1e1a16;
-            color: #f6f4f0;
-            padding: 12px 32px;
-            border-radius: 60px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-            z-index: 999;
-            pointer-events: none;
-            white-space: nowrap;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast i {
-            margin-right: 10px;
-            color: #f6d8b0;
-        }
-
-        /* ─── FOOTER ─── */
-        .app-footer {
-            margin-top: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
-            font-size: 0.7rem;
-            color: #b8aaa0;
-            border-top: 1px solid #ede9e3;
-            padding-top: 1rem;
-        }
-
-        .app-footer i {
-            margin-right: 4px;
-        }
-
-        /* ─── SCROLLBAR ─── */
-        .table-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-        .table-scroll::-webkit-scrollbar-track {
-            background: #f6f4f0;
-            border-radius: 4px;
-        }
-        .table-scroll::-webkit-scrollbar-thumb {
-            background: #d4ccc4;
-            border-radius: 4px;
-        }
-        .table-scroll::-webkit-scrollbar-thumb:hover {
-            background: #b8aaa0;
+            .platform-badge {
+                font-size: 0.4rem;
+                padding: 1px 5px;
+                margin-left: 3px;
+            }
+            .btn-edit {
+                font-size: 0.7rem;
+                padding: 2px 4px;
+            }
+            .modal-box {
+                padding: 1.2rem 0.8rem;
+            }
+            .modal-box h3 {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -894,6 +1001,20 @@
 
     <!-- ─── TOAST ─── -->
     <div id="toast" class="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Data tersimpan</span></div>
+
+    <!-- ─── MODAL EDIT ─── -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-pen" style="color:#b87a4a;margin-right:8px;"></i>Edit Konten</h3>
+            <div class="sub" id="editModalSub">Mengubah konten untuk jam <strong id="editTimeLabel">07.00</strong></div>
+            <label for="editContentInput">Isi Konten Baru</label>
+            <input type="text" id="editContentInput" placeholder="Tulis konten baru…" />
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeEditModal()">Batal</button>
+                <button class="btn btn-primary" onclick="saveEditContent()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ─── APP ─── -->
     <div class="app-container">
@@ -912,10 +1033,13 @@
             <div class="header-actions">
                 <div class="date-picker-wrap">
                     <i class="fas fa-calendar-day"></i>
-                    <input type="date" id="reportDate" />
+                    <input type="date" id="reportDate" aria-label="Pilih tanggal laporan" />
                 </div>
                 <button class="btn btn-outline" onclick="resetToday()" title="Reset semua status & keterangan hari ini">
                     <i class="fas fa-undo-alt"></i> Reset Hari
+                </button>
+                <button class="btn btn-outline" onclick="resetAllContent()" title="Kembalikan semua konten ke default">
+                    <i class="fas fa-rotate-left"></i> Reset Konten
                 </button>
             </div>
         </div>
@@ -942,6 +1066,7 @@
                         <th class="col-status"><i class="fas fa-circle-check" style="margin-right:6px;"></i>STATUS</th>
                         <th class="col-list"><i class="fas fa-list-ul" style="margin-right:6px;"></i>LIST</th>
                         <th class="col-keterangan"><i class="fas fa-pen" style="margin-right:6px;"></i>KETERANGAN</th>
+                        <th class="col-edit"><i class="fas fa-edit"></i></th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -969,16 +1094,16 @@
         <!-- FOOTER -->
         <div class="app-footer">
             <span><i class="fas fa-database"></i> Data tersimpan otomatis di peramban Anda.</span>
-            <span><i class="fas fa-print"></i> Klik <strong>CSV</strong>, <strong>PDF</strong>, atau <strong>Spreadsheet</strong> untuk ekspor.</span>
+            <span><i class="fas fa-edit"></i> Klik <strong>✎</strong> untuk mengubah konten.</span>
         </div>
     </div>
 
     <script>
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  DATA DEFINISI
+        //  DATA DEFINISI — DEFAULT
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        const LIST_ITEMS = [
+        const DEFAULT_ITEMS = [
             { time: '07.00', content: 'Opening (Pawon Mbah Gito Sudah Buka)' },
             { time: '07.15', content: 'Menu Prasmanan' },
             { time: '07.30', content: 'Customer Sarapan' },
@@ -1003,7 +1128,7 @@
             { time: '12.15', content: 'Menu Sayur Nusantara' },
             { time: '12.30', content: 'Customer Review Singkat' },
             { time: '12.45', content: 'Suasana Ramai Jam Makan Siang' },
-            { time: '13.00', content: 'Upload Konten TikTok' },
+            { time: '13.00', content: 'Mini Zoo Pawon Mbah Gito', platform: 'tiktok' },
             { time: '13.15', content: 'Menu Minuman Favorit' },
             { time: '13.30', content: 'Dessert & Jenang' },
             { time: '13.45', content: 'Detail Interior Bernuansa Jawa' },
@@ -1011,15 +1136,16 @@
             { time: '14.15', content: 'Spot Foto Estetik' },
             { time: '14.30', content: 'Merchandise Pawon Mbah Gito' },
             { time: '14.45', content: 'Testimoni Customer' },
-            { time: '15.00', content: 'Suasana Sore Hari' },
+            { time: '15.00', content: 'Moment Kebersamaan / Drone suasana Pawon Mbah Gito', platform: 'feed' },
             { time: '15.15', content: 'Coffee Time di Pawon' },
             { time: '15.30', content: 'Snack Tradisional' },
             { time: '15.45', content: 'ASMR Pembuatan Minuman' },
-            { time: '16.00', content: 'Upload YouTube Shorts' }
+            { time: '16.00', content: 'Moment Kebersamaan / Drone suasana Pawon Mbah Gito', platform: 'youtube' }
         ];
 
         const STATUS_OPTIONS = ['SUDAH', 'PROSES', 'PENDING', 'BELUM'];
-        const STORAGE_KEY = 'laporan_harian_konten_data_v2';
+        const STORAGE_KEY = 'laporan_harian_konten_data_v3';
+        const CONTENT_KEY = 'laporan_harian_konten_list';
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  STATE
@@ -1027,7 +1153,9 @@
 
         let currentDate = new Date().toISOString().split('T')[0];
         let allData = {};
+        let listItems = []; // array { time, content, platform? }
         let saveTimeout = null;
+        let editIndex = -1;
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  INIT
@@ -1038,6 +1166,7 @@
             dateInput.value = currentDate;
             dateInput.max = new Date().toISOString().split('T')[0];
 
+            loadContentList();
             loadFromStorage();
             renderTable();
             updateRecap();
@@ -1045,18 +1174,20 @@
             updateSaveIndicator('Tersimpan', false);
 
             dateInput.addEventListener('change', (e) => {
-                currentDate = e.target.value;
-                renderTable();
-                updateRecap();
-                updateRecapDateLabel();
-                updateSaveIndicator('Tersimpan', false);
+                const newDate = e.target.value;
+                if (newDate) {
+                    currentDate = newDate;
+                    loadFromStorage();
+                    renderTable();
+                    updateRecap();
+                    updateRecapDateLabel();
+                    updateSaveIndicator('Tersimpan', false);
+                }
             });
 
             document.addEventListener('change', (e) => {
                 if (e.target.closest('.status-select') || e.target.closest('.keterangan-input')) {
-                    saveToStorage();
-                    updateRecap();
-                    updateSaveIndicator('Tersimpan', false);
+                    saveCurrentData();
                 }
             });
 
@@ -1065,16 +1196,62 @@
                     clearTimeout(saveTimeout);
                     updateSaveIndicator('Menyimpan...', true);
                     saveTimeout = setTimeout(() => {
-                        saveToStorage();
-                        updateRecap();
-                        updateSaveIndicator('Tersimpan', false);
+                        saveCurrentData();
                     }, 400);
                 }
+            });
+
+            // Modal Enter key
+            document.getElementById('editContentInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') saveEditContent();
+                if (e.key === 'Escape') closeEditModal();
+            });
+
+            // Close modal on overlay click
+            document.getElementById('editModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeEditModal();
             });
         });
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  STORAGE
+        //  CONTENT LIST STORAGE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function loadContentList() {
+            try {
+                const raw = localStorage.getItem(CONTENT_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length === DEFAULT_ITEMS.length) {
+                        listItems = parsed;
+                        return;
+                    }
+                }
+            } catch (_) { /* ignore */ }
+            // fallback ke default
+            listItems = DEFAULT_ITEMS.map(item => ({ ...item }));
+            saveContentList();
+        }
+
+        function saveContentList() {
+            try {
+                localStorage.setItem(CONTENT_KEY, JSON.stringify(listItems));
+            } catch (_) { /* ignore */ }
+        }
+
+        function resetContentList() {
+            listItems = DEFAULT_ITEMS.map(item => ({ ...item }));
+            saveContentList();
+            // Reset data harian juga karena konten berubah
+            allData = {};
+            saveToStorage();
+            renderTable();
+            updateRecap();
+            showToast('Konten telah direset ke default');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  STORAGE DATA HARIAN
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function loadFromStorage() {
@@ -1083,8 +1260,9 @@
                 if (raw) allData = JSON.parse(raw);
                 else allData = {};
             } catch (_) { allData = {}; }
+
             if (!allData[currentDate]) {
-                allData[currentDate] = LIST_ITEMS.map(() => ({ status: 'BELUM', keterangan: '' }));
+                allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
                 saveToStorage();
             }
         }
@@ -1092,15 +1270,44 @@
         function saveToStorage() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
-            } catch (_) {}
+            } catch (_) { /* ignore */ }
         }
 
         function getDayData() {
             if (!allData[currentDate]) {
-                allData[currentDate] = LIST_ITEMS.map(() => ({ status: 'BELUM', keterangan: '' }));
+                allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
                 saveToStorage();
             }
+            // Jika jumlah item berubah (misal setelah reset), sesuaikan
+            while (allData[currentDate].length < listItems.length) {
+                allData[currentDate].push({ status: 'BELUM', keterangan: '' });
+            }
+            while (allData[currentDate].length > listItems.length) {
+                allData[currentDate].pop();
+            }
             return allData[currentDate];
+        }
+
+        function saveCurrentData() {
+            const tbody = document.getElementById('tableBody');
+            const rows = tbody.querySelectorAll('tr');
+            const dayData = getDayData();
+
+            rows.forEach((row, idx) => {
+                if (idx >= dayData.length) return;
+                const statusSelect = row.querySelector('.status-select');
+                const keteranganInput = row.querySelector('.keterangan-input');
+                if (statusSelect) {
+                    dayData[idx].status = statusSelect.value;
+                }
+                if (keteranganInput) {
+                    dayData[idx].keterangan = keteranganInput.value;
+                }
+            });
+
+            saveToStorage();
+            updateRecap();
+            updateSaveIndicator('Tersimpan', false);
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1128,16 +1335,31 @@
             const dayData = getDayData();
             let html = '';
 
-            LIST_ITEMS.forEach((item, idx) => {
+            listItems.forEach((item, idx) => {
                 const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
                 const status = row.status || 'BELUM';
                 const keterangan = row.keterangan || '';
                 const statusClass = 'status-' + status.toLowerCase();
 
+                let platformClass = '';
+                let badgeHtml = '';
+                if (item.platform === 'tiktok') {
+                    platformClass = 'platform-tiktok';
+                    badgeHtml = `<span class="platform-badge tiktok"><i class="fab fa-tiktok"></i> TikTok</span>`;
+                } else if (item.platform === 'feed') {
+                    platformClass = 'platform-feed';
+                    badgeHtml = `<span class="platform-badge feed"><i class="fab fa-instagram"></i> Feed</span>`;
+                } else if (item.platform === 'youtube') {
+                    platformClass = 'platform-youtube';
+                    badgeHtml = `<span class="platform-badge youtube"><i class="fab fa-youtube"></i> Shorts</span>`;
+                }
+
+                const content = item.content || '';
+
                 html += `
-                    <tr>
+                    <tr class="${platformClass}">
                         <td class="col-status">
-                            <select class="status-select ${statusClass}" data-index="${idx}" aria-label="Status">
+                            <select class="status-select ${statusClass}" data-index="${idx}" aria-label="Status untuk ${item.time} - ${content}">
                                 ${STATUS_OPTIONS.map(opt =>
                                     `<option value="${opt}" ${opt === status ? 'selected' : ''}>${opt}</option>`
                                 ).join('')}
@@ -1146,53 +1368,83 @@
                         <td class="col-list">
                             <div class="list-cell">
                                 <span class="time">${item.time}</span>
-                                <span class="content">${item.content}</span>
+                                <span class="content-text">${escapeHtml(content)}</span>
+                                ${badgeHtml}
                             </div>
                         </td>
                         <td class="col-keterangan">
                             <input class="keterangan-input" type="text" data-index="${idx}"
-                                   placeholder="Catatan…" value="${escapeHtml(keterangan)}" />
+                                   placeholder="Catatan…" value="${escapeHtml(keterangan)}" aria-label="Keterangan untuk ${item.time}" />
+                        </td>
+                        <td class="col-edit">
+                            <button class="btn-edit" onclick="openEditModal(${idx})" title="Edit konten" aria-label="Edit konten jam ${item.time}">
+                                <i class="fas fa-pen"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
             });
 
             tbody.innerHTML = html;
-
-            tbody.querySelectorAll('.status-select').forEach(sel => {
-                sel.addEventListener('change', (e) => {
-                    const idx = parseInt(e.target.dataset.index);
-                    const dayData2 = getDayData();
-                    if (dayData2[idx]) {
-                        dayData2[idx].status = e.target.value;
-                        e.target.className = 'status-select status-' + e.target.value.toLowerCase();
-                        saveToStorage();
-                        updateRecap();
-                        updateSaveIndicator('Tersimpan', false);
-                    }
-                });
-            });
-
-            tbody.querySelectorAll('.keterangan-input').forEach(inp => {
-                inp.addEventListener('change', (e) => {
-                    const idx = parseInt(e.target.dataset.index);
-                    const dayData2 = getDayData();
-                    if (dayData2[idx]) {
-                        dayData2[idx].keterangan = e.target.value;
-                        saveToStorage();
-                        updateRecap();
-                        updateSaveIndicator('Tersimpan', false);
-                    }
-                });
-            });
-
-            document.getElementById('totalItems').textContent = LIST_ITEMS.length;
+            document.getElementById('totalItems').textContent = listItems.length;
         }
 
         function escapeHtml(str) {
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  MODAL EDIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function openEditModal(index) {
+            editIndex = index;
+            const item = listItems[index];
+            if (!item) return;
+
+            document.getElementById('editTimeLabel').textContent = item.time;
+            document.getElementById('editContentInput').value = item.content || '';
+            document.getElementById('editModal').classList.add('active');
+            setTimeout(() => {
+                document.getElementById('editContentInput').focus();
+                document.getElementById('editContentInput').select();
+            }, 100);
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+            editIndex = -1;
+        }
+
+        function saveEditContent() {
+            if (editIndex < 0 || editIndex >= listItems.length) return;
+            const input = document.getElementById('editContentInput');
+            const newContent = input.value.trim();
+            if (!newContent) {
+                showToast('Konten tidak boleh kosong!');
+                return;
+            }
+
+            // Update listItems
+            listItems[editIndex].content = newContent;
+            saveContentList();
+
+            // Update data harian jika ada perubahan jumlah item (tidak berubah)
+            // Tapi kita perlu pastikan data harian sinkron
+            const dayData = getDayData();
+            // Jika data harian lebih pendek dari listItems, tambahkan
+            while (dayData.length < listItems.length) {
+                dayData.push({ status: 'BELUM', keterangan: '' });
+            }
+            saveToStorage();
+
+            closeEditModal();
+            renderTable();
+            updateRecap();
+            updateSaveIndicator('Tersimpan', false);
+            showToast('Konten berhasil diubah!');
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1248,12 +1500,17 @@
 
         function resetToday() {
             if (!confirm('Reset semua status & keterangan untuk hari ini?')) return;
-            allData[currentDate] = LIST_ITEMS.map(() => ({ status: 'BELUM', keterangan: '' }));
+            allData[currentDate] = listItems.map(() => ({ status: 'BELUM', keterangan: '' }));
             saveToStorage();
             renderTable();
             updateRecap();
             updateSaveIndicator('Tersimpan', false);
             showToast('Hari ini telah direset');
+        }
+
+        function resetAllContent() {
+            if (!confirm('Kembalikan semua konten ke daftar default? Semua perubahan konten akan hilang.')) return;
+            resetContentList();
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1265,11 +1522,14 @@
             let csv = '\uFEFF';
             csv += 'STATUS,LIST,KETERANGAN\n';
 
-            LIST_ITEMS.forEach((item, idx) => {
+            listItems.forEach((item, idx) => {
                 const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
                 const status = row.status || 'BELUM';
                 const ket = (row.keterangan || '').replace(/,/g, ';');
-                const label = `${item.time} - ${item.content}`;
+                let label = `${item.time} - ${item.content}`;
+                if (item.platform) {
+                    label += ` [${item.platform.toUpperCase()}]`;
+                }
                 csv += `${status},"${label}",${ket}\n`;
             });
 
@@ -1293,7 +1553,7 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  EXPORT: PDF — RECAP TANPA EMOJI, RAPI
+        //  EXPORT: PDF
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportPDF() {
@@ -1301,7 +1561,6 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
 
-            // HEADER
             doc.setFontSize(16);
             doc.setTextColor(30, 26, 22);
             doc.text('Laporan Harian Konten - Pawon Mbah Gito', 14, 20);
@@ -1312,18 +1571,23 @@
             doc.setTextColor(100, 90, 80);
             doc.text(`Tanggal: ${dateStr}`, 14, 28);
 
-            // TABEL UTAMA
-            const tableData = LIST_ITEMS.map((item, idx) => {
+            const tableData = listItems.map((item, idx) => {
                 const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                let listLabel = `${item.time} - ${item.content}`;
+                if (item.platform) {
+                    listLabel += ` [${item.platform.toUpperCase()}]`;
+                }
                 return [
                     row.status || 'BELUM',
-                    `${item.time} - ${item.content}`,
+                    listLabel,
                     row.keterangan || ''
                 ];
             });
 
             doc.autoTable({
-                head: [['STATUS', 'LIST', 'KETERANGAN']],
+                head: [
+                    ['STATUS', 'LIST', 'KETERANGAN']
+                ],
                 body: tableData,
                 startY: 34,
                 styles: { fontSize: 8, cellPadding: 3 },
@@ -1341,10 +1605,7 @@
                 }
             });
 
-            // ─── REKAP (tanpa emoji) ───
             const finalY = doc.lastAutoTable.finalY + 12;
-
-            // garis pemisah
             doc.setDrawColor(200, 195, 190);
             doc.line(14, finalY - 6, doc.internal.pageSize.width - 14, finalY - 6);
 
@@ -1387,11 +1648,11 @@
             });
 
             doc.save(`laporan_harian_${currentDate}.pdf`);
-            showToast('PDF berhasil diekspor (rekap tanpa emoji)');
+            showToast('PDF berhasil diekspor');
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  EXPORT: Spreadsheet
+        //  EXPORT: Spreadsheet (XLS)
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         function exportSpreadsheet() {
@@ -1413,7 +1674,9 @@
                     .status-proses { background: #f6eee6; }
                     .status-pending { background: #fcf3e0; }
                     .status-belum { background: #f6f4f0; }
-                    .recap-title { background: #ede9e3; font-weight: bold; }
+                    .platform-tiktok td:first-child { background: #fce4ec; }
+                    .platform-feed td:first-child { background: #e8f5e9; }
+                    .platform-youtube td:first-child { background: #e3f2fd; }
                 </style>
                 </head><body>
                 <h2>Laporan Harian Konten - Pawon Mbah Gito</h2>
@@ -1423,15 +1686,24 @@
                     <tbody>
             `;
 
-            LIST_ITEMS.forEach((item, idx) => {
+            listItems.forEach((item, idx) => {
                 const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
                 const status = row.status || 'BELUM';
                 const ket = (row.keterangan || '');
-                const cls = 'status-' + status.toLowerCase();
+                let cls = 'status-' + status.toLowerCase();
+                let listLabel = `${item.time} - ${item.content}`;
+                if (item.platform) {
+                    listLabel += ` [${item.platform.toUpperCase()}]`;
+                }
+                let platformCls = '';
+                if (item.platform === 'tiktok') platformCls = 'platform-tiktok';
+                else if (item.platform === 'feed') platformCls = 'platform-feed';
+                else if (item.platform === 'youtube') platformCls = 'platform-youtube';
+
                 html += `
-                    <tr class="${cls}">
+                    <tr class="${cls} ${platformCls}">
                         <td>${status}</td>
-                        <td>${item.time} - ${item.content}</td>
+                        <td>${listLabel}</td>
                         <td>${ket}</td>
                     </tr>
                 `;
@@ -1499,10 +1771,15 @@
             window._toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
         }
 
+        // Expose
         window.resetToday = resetToday;
+        window.resetAllContent = resetAllContent;
         window.exportCSV = exportCSV;
         window.exportPDF = exportPDF;
         window.exportSpreadsheet = exportSpreadsheet;
+        window.openEditModal = openEditModal;
+        window.closeEditModal = closeEditModal;
+        window.saveEditContent = saveEditContent;
     </script>
 
 </body>
