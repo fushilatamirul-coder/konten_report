@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laporan Harian Konten · Pawon Mbah Gito</title>
 
-    <!-- Font Awesome 6 (stabil) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
-    <!-- jsPDF + AutoTable (versi terbaru stabil) -->
+    <!-- jsPDF + AutoTable -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js">
@@ -496,50 +496,55 @@
             box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
         }
 
-        /* ─── WARNA STATUS ─── */
+        /* ─── WARNA STATUS SESUAI PERMINTAAN ─── */
+        /* SUDAH → Hijau, teks putih */
         .status-select.status-sudah {
             border-color: #2d7a4f;
-            background-color: #e8f5e9;
-            color: #1a5a38;
+            background-color: #2d7a4f;
+            color: #ffffff;
         }
         .status-select.status-sudah:focus {
-            box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.2);
+            box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.3);
         }
 
+        /* BELUM → Merah, teks putih */
         .status-select.status-belum {
             border-color: #c62828;
-            background-color: #ffebee;
-            color: #b71c1c;
+            background-color: #c62828;
+            color: #ffffff;
         }
         .status-select.status-belum:focus {
-            box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.2);
+            box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.3);
         }
 
+        /* PENDING → Biru, teks putih */
         .status-select.status-pending {
-            border-color: #f9a825;
-            background-color: #fff8e1;
-            color: #e65100;
+            border-color: #1565c0;
+            background-color: #1565c0;
+            color: #ffffff;
         }
         .status-select.status-pending:focus {
-            box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.25);
+            box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.3);
         }
 
-        .status-select.status-proses {
-            border-color: #1565c0;
-            background-color: #e3f2fd;
-            color: #0d47a1;
-        }
-        .status-select.status-proses:focus {
-            box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.2);
-        }
-
+        /* PRIORITAS → Putih, teks kuning */
         .status-select.status-prioritas {
-            border-color: #616161;
-            background-color: #f5f5f5;
-            color: #424242;
+            border-color: #d4ccc4;
+            background-color: #ffffff;
+            color: #f9a825;
         }
         .status-select.status-prioritas:focus {
-            box-shadow: 0 0 0 4px rgba(97, 97, 97, 0.2);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+        }
+
+        /* PROSES → Kuning, teks hitam */
+        .status-select.status-proses {
+            border-color: #f9a825;
+            background-color: #f9a825;
+            color: #1e1a16;
+        }
+        .status-select.status-proses:focus {
+            box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.3);
         }
 
         .keterangan-input {
@@ -784,20 +789,21 @@
             transform: scale(1.06);
         }
 
+        /* Warna value pada recap card sesuai status */
         .recap-card .value.sudah {
             color: #2d7a4f;
         }
         .recap-card .value.proses {
-            color: #1565c0;
+            color: #f9a825;
         }
         .recap-card .value.pending {
-            color: #f9a825;
+            color: #1565c0;
         }
         .recap-card .value.belum {
             color: #c62828;
         }
         .recap-card .value.prioritas {
-            color: #616161;
+            color: #f9a825;
         }
 
         .recap-card.dark {
@@ -1113,10 +1119,10 @@
             </div>
             <div class="recap-grid" id="recapGrid">
                 <div class="recap-card"><div class="label">✅ SUDAH</div><div class="value sudah" id="rSudah">0</div></div>
-                <div class="recap-card"><div class="label">🔵 PROSES</div><div class="value proses" id="rProses">0</div></div>
-                <div class="recap-card"><div class="label">🟡 PENDING</div><div class="value pending" id="rPending">0</div></div>
+                <div class="recap-card"><div class="label">🔄 PROSES</div><div class="value proses" id="rProses">0</div></div>
+                <div class="recap-card"><div class="label">⏳ PENDING</div><div class="value pending" id="rPending">0</div></div>
                 <div class="recap-card"><div class="label">🔴 BELUM</div><div class="value belum" id="rBelum">0</div></div>
-                <div class="recap-card" style="background:#f5f5f5;border-color:#bdbdbd;"><div class="label">⬜ PRIORITAS</div><div class="value prioritas" id="rPrioritas">0</div></div>
+                <div class="recap-card" style="background:#f5f5f5;border-color:#bdbdbd;"><div class="label">⭐ PRIORITAS</div><div class="value prioritas" id="rPrioritas">0</div></div>
                 <div class="recap-card dark"><div class="label">📊 Total Item</div><div class="value" id="rTotal">0</div></div>
                 <div class="recap-card accent"><div class="label">🎯 Penyelesaian</div><div class="value" id="rPersen">0%</div></div>
             </div>
@@ -1134,7 +1140,7 @@
         //  DATA DEFINISI
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        const DEFAULT_ITEMS = [
+        var DEFAULT_ITEMS = [
             { time: '07.00', content: 'Opening (Pawon Mbah Gito Sudah Buka)' },
             { time: '07.15', content: 'Menu Prasmanan' },
             { time: '07.30', content: 'Customer Sarapan' },
@@ -1174,26 +1180,26 @@
             { time: '16.00', content: 'Moment Kebersamaan / Drone suasana Pawon Mbah Gito', platform: 'youtube' }
         ];
 
-        const STATUS_OPTIONS = ['SUDAH', 'PROSES', 'PENDING', 'BELUM', 'PRIORITAS'];
-        const STORAGE_KEY = 'laporan_harian_konten_data_v4';
-        const CONTENT_KEY = 'laporan_harian_konten_list';
+        var STATUS_OPTIONS = ['SUDAH', 'PROSES', 'PENDING', 'BELUM', 'PRIORITAS'];
+        var STORAGE_KEY = 'laporan_harian_konten_data_v4';
+        var CONTENT_KEY = 'laporan_harian_konten_list';
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  STATE
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        let currentDate = new Date().toISOString().split('T')[0];
-        let allData = {};
-        let listItems = [];
-        let saveTimeout = null;
-        let editIndex = -1;
+        var currentDate = new Date().toISOString().split('T')[0];
+        var allData = {};
+        var listItems = [];
+        var saveTimeout = null;
+        var editIndex = -1;
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  INIT
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         document.addEventListener('DOMContentLoaded', function() {
-            const dateInput = document.getElementById('reportDate');
+            var dateInput = document.getElementById('reportDate');
             dateInput.value = currentDate;
             dateInput.max = new Date().toISOString().split('T')[0];
 
@@ -1205,7 +1211,7 @@
             updateSaveIndicator('Tersimpan', false);
 
             dateInput.addEventListener('change', function(e) {
-                const newDate = e.target.value;
+                var newDate = e.target.value;
                 if (newDate) {
                     currentDate = newDate;
                     loadFromStorage();
@@ -1216,7 +1222,6 @@
                 }
             });
 
-            // Event listener untuk perubahan status & keterangan
             document.addEventListener('change', function(e) {
                 if (e.target.closest('.status-select') || e.target.closest('.keterangan-input')) {
                     saveCurrentData();
@@ -1249,9 +1254,9 @@
 
         function loadContentList() {
             try {
-                const raw = localStorage.getItem(CONTENT_KEY);
+                var raw = localStorage.getItem(CONTENT_KEY);
                 if (raw) {
-                    const parsed = JSON.parse(raw);
+                    var parsed = JSON.parse(raw);
                     if (Array.isArray(parsed) && parsed.length === DEFAULT_ITEMS.length) {
                         listItems = parsed;
                         return;
@@ -1271,7 +1276,6 @@
         function resetContentList() {
             listItems = DEFAULT_ITEMS.map(function(item) { return { ...item }; });
             saveContentList();
-            // Data harian tetap dipertahankan, hanya konten yang direset
             renderTable();
             updateRecap();
             showToast('Konten telah direset ke default');
@@ -1279,7 +1283,7 @@
 
         function loadFromStorage() {
             try {
-                const raw = localStorage.getItem(STORAGE_KEY);
+                var raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) allData = JSON.parse(raw);
                 else allData = {};
             } catch (_) { allData = {}; }
@@ -1301,7 +1305,6 @@
                 allData[currentDate] = listItems.map(function() { return { status: 'BELUM', keterangan: '' }; });
                 saveToStorage();
             }
-            // Pastikan jumlah data harian sesuai dengan listItems
             while (allData[currentDate].length < listItems.length) {
                 allData[currentDate].push({ status: 'BELUM', keterangan: '' });
             }
@@ -1696,11 +1699,11 @@
                     table { border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11px; }
                     th { background: #1e1a16; color: #fff; font-weight: bold; padding: 8px 12px; border: 1px solid #333; }
                     td { padding: 6px 12px; border: 1px solid #ccc; }
-                    .status-sudah { background: #e8f5e9; }
-                    .status-proses { background: #e3f2fd; }
-                    .status-pending { background: #fff8e1; }
-                    .status-belum { background: #ffebee; }
-                    .status-prioritas { background: #f5f5f5; }
+                    .status-sudah { background: #2d7a4f; color: #ffffff; }
+                    .status-proses { background: #f9a825; color: #1e1a16; }
+                    .status-pending { background: #1565c0; color: #ffffff; }
+                    .status-belum { background: #c62828; color: #ffffff; }
+                    .status-prioritas { background: #ffffff; color: #f9a825; }
                     .platform-tiktok td:first-child { background: #fce4ec; }
                     .platform-feed td:first-child { background: #e8f5e9; }
                     .platform-youtube td:first-child { background: #e3f2fd; }
@@ -1800,7 +1803,7 @@
             window._toastTimer = setTimeout(function() { el.classList.remove('show'); }, 2400);
         }
 
-        // Expose functions ke global scope agar dapat dipanggil dari HTML
+        // Expose functions ke global scope
         window.resetToday = resetToday;
         window.resetAllContent = resetAllContent;
         window.exportCSV = exportCSV;
