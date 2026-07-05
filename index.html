@@ -1,609 +1,1231 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Divisi Konten</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Harian Konten · Pawon Mbah Gito</title>
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js">
+    </script>
+
     <style>
+        /* ─── RESET & BASE ─── */
         * {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            background: #f5f5f5;
-            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f6f4f0;
+            color: #1e1a16;
+            min-height: 100vh;
+            padding: 1.5rem;
         }
-        .container {
-            max-width: 1300px;
-            margin: auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 20px;
+
+        /* ─── APP CONTAINER ─── */
+        .app-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            padding: 2rem 2rem 2.5rem;
+            border: 1px solid #ede9e3;
         }
-        h1 {
+
+        /* ─── HEADER ─── */
+        .app-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.75rem;
+            gap: 1rem;
+        }
+
+        .app-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-title-group .icon-wrapper {
+            width: 44px;
+            height: 44px;
+            background: #1e1a16;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f6d8b0;
+            font-size: 1.25rem;
+        }
+
+        .app-title-group h1 {
             font-size: 1.6rem;
-            margin-bottom: 10px;
-            color: #333;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #1e1a16;
         }
-        .sub {
-            color: #666;
-            margin-bottom: 25px;
-            border-left: 4px solid #f97316;
-            padding-left: 12px;
+
+        .app-title-group h1 span {
+            color: #b87a4a;
+            font-weight: 400;
         }
-        table {
+
+        .app-title-group .sub {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #8a7a6a;
+            background: #f0ebe5;
+            padding: 2px 12px;
+            border-radius: 40px;
+            margin-left: 8px;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-picker-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f6f4f0;
+            padding: 6px 14px 6px 18px;
+            border-radius: 60px;
+            border: 1px solid #e4ddd6;
+        }
+
+        .date-picker-wrap i {
+            color: #b87a4a;
+            font-size: 0.9rem;
+        }
+
+        .date-picker-wrap input[type="date"] {
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1e1a16;
+            padding: 4px 0;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .date-picker-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 60px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f0ebe5;
+            color: #1e1a16;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-primary {
+            background: #1e1a16;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #3a2e26;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d4ccc4;
+        }
+        .btn-outline:hover {
+            background: #f6f4f0;
+            border-color: #b87a4a;
+        }
+
+        .btn-success {
+            background: #2d7a4f;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #1f5e3b;
+        }
+
+        .btn-warning {
+            background: #b87a4a;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #9e6639;
+        }
+
+        .btn-danger-outline {
+            background: transparent;
+            border: 1px solid #d4ccc4;
+            color: #b34a4a;
+        }
+        .btn-danger-outline:hover {
+            background: #fdf0f0;
+            border-color: #b34a4a;
+        }
+
+        /* ─── TOOLBAR ─── */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ede9e3;
+        }
+
+        .toolbar-left {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-left .badge-count {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #8a7a6a;
+            background: #f0ebe5;
+            padding: 4px 14px;
+            border-radius: 40px;
+        }
+
+        .toolbar-right {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ─── TABLE WRAPPER ─── */
+        .table-scroll {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid #ede9e3;
+            background: #fcfbf9;
+        }
+
+        table.laporan {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            font-size: 0.82rem;
+            min-width: 720px;
         }
-        th {
-            background: #f97316;
-            color: white;
-            padding: 12px 8px;
+
+        table.laporan thead th {
+            background: #f6f4f0;
+            color: #3a2e26;
             font-weight: 600;
-            font-size: 0.9rem;
-        }
-        td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #eee;
-            vertical-align: middle;
-        }
-        .task-desc {
-            font-weight: 500;
-            color: #1e293b;
-        }
-        .status-btn {
-            padding: 6px 12px;
-            border-radius: 40px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.75rem;
-            transition: 0.2s;
-            background: #e2e8f0;
-            color: #334155;
-        }
-        .status-btn.done {
-            background: #22c55e;
-            color: white;
-        }
-        .status-btn.notdone {
-            background: #f97316;
-            color: white;
-        }
-        .status-btn:hover {
-            opacity: 0.8;
-            transform: scale(0.97);
-        }
-        .badge {
-            display: inline-block;
-            background: #e9ecef;
-            padding: 4px 10px;
-            border-radius: 30px;
             font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 2px solid #e4ddd6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        table.laporan thead th:not(:last-child) {
+            border-right: 1px solid #e8e2db;
+        }
+
+        table.laporan tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #ede9e3;
+            vertical-align: middle;
+            line-height: 1.4;
+        }
+
+        table.laporan tbody td:not(:last-child) {
+            border-right: 1px solid #f0ebe5;
+        }
+
+        table.laporan tbody tr:hover {
+            background: #faf8f5;
+        }
+
+        table.laporan tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ─── COLUMN WIDTHS ─── */
+        .col-status {
+            width: 130px;
+            min-width: 120px;
+        }
+        .col-list {
+            width: auto;
+            min-width: 300px;
+        }
+        .col-keterangan {
+            width: 260px;
+            min-width: 180px;
+        }
+
+        /* ─── STATUS DROPDOWN ─── */
+        .status-select {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 10px 5px 32px;
+            border-radius: 40px;
+            border: 1.5px solid #e4ddd6;
+            background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 8"><path fill="%238a7a6a" d="M6 8L0 0h12z"/></svg>') no-repeat right 10px center;
+            background-size: 10px;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            width: 100%;
+            max-width: 130px;
+            color: #1e1a16;
+            background-color: #fff;
+        }
+
+        .status-select:focus {
+            outline: none;
+            border-color: #b87a4a;
+            box-shadow: 0 0 0 3px rgba(184, 122, 74, 0.12);
+        }
+
+        /* status colors */
+        .status-select.status-sudah {
+            border-color: #2d7a4f;
+            background-color: #eaf6ef;
+            color: #1a5a38;
+        }
+        .status-select.status-proses {
+            border-color: #b87a4a;
+            background-color: #f6eee6;
+            color: #8a5a2a;
+        }
+        .status-select.status-pending {
+            border-color: #d4a040;
+            background-color: #fcf3e0;
+            color: #8a6a20;
+        }
+        .status-select.status-belum {
+            border-color: #c4b4a8;
+            background-color: #f6f4f0;
+            color: #6a5a4a;
+        }
+
+        /* ─── KETERANGAN INPUT ─── */
+        .keterangan-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            padding: 4px 0;
+            color: #1e1a16;
+            outline: none;
+            border-bottom: 1.5px dashed transparent;
+            transition: border-color 0.2s;
+            min-width: 80px;
+        }
+
+        .keterangan-input:focus {
+            border-bottom-color: #b87a4a;
+        }
+
+        .keterangan-input::placeholder {
+            color: #b8aaa0;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        /* ─── LIST COLUMN ─── */
+        .list-cell {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .list-cell .time {
+            font-weight: 700;
+            color: #b87a4a;
+            font-size: 0.7rem;
+            letter-spacing: 0.2px;
+            background: #f0ebe5;
+            padding: 1px 10px;
+            border-radius: 40px;
+            white-space: nowrap;
+        }
+
+        .list-cell .content {
+            font-weight: 500;
+            color: #1e1a16;
+            font-size: 0.78rem;
+        }
+
+        /* ─── RECAP SECTION ─── */
+        .recap-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #ede9e3;
+        }
+
+        .recap-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            gap: 12px;
+        }
+
+        .recap-header h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e1a16;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recap-header h2 i {
+            color: #b87a4a;
+        }
+
+        .recap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .recap-card {
+            background: #f6f4f0;
+            border-radius: 16px;
+            padding: 14px 16px;
+            text-align: center;
+            border: 1px solid #ede9e3;
+        }
+
+        .recap-card .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #8a7a6a;
             font-weight: 600;
         }
-        .footer-note {
-            background: #fef2e8;
-            padding: 12px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            color: #7c2d12;
-            text-align: center;
-            margin-top: 20px;
+
+        .recap-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e1a16;
+            line-height: 1.3;
         }
-        .hari-tanggal-table {
-            margin-top: 20px;
-            margin-bottom: 20px;
+
+        .recap-card .value.sudah {
+            color: #2d7a4f;
         }
-        .hari-tanggal-table th {
-            background: #2c3e50;
+        .recap-card .value.proses {
+            color: #b87a4a;
         }
-        .tanggal-hari-ini {
-            font-weight: bold;
-            color: #f97316;
+        .recap-card .value.pending {
+            color: #d4a040;
         }
-        
-        /* Style untuk menu SAVE */
-        .save-menu {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .recap-card .value.belum {
+            color: #8a7a6a;
         }
-        .save-info {
-            color: white;
-            font-size: 0.9rem;
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            body {
+                padding: 0.75rem;
+            }
+            .app-container {
+                padding: 1.25rem 1rem;
+                border-radius: 16px;
+            }
+            .app-title-group h1 {
+                font-size: 1.2rem;
+            }
+            .app-title-group .sub {
+                font-size: 0.6rem;
+                margin-left: 4px;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toolbar-left,
+            .toolbar-right {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .date-picker-wrap {
+                justify-content: center;
+            }
+            .recap-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            table.laporan {
+                font-size: 0.72rem;
+                min-width: 560px;
+            }
+            .col-status {
+                width: 100px;
+                min-width: 90px;
+            }
+            .col-keterangan {
+                width: 140px;
+                min-width: 120px;
+            }
+            .list-cell .time {
+                font-size: 0.6rem;
+                padding: 1px 8px;
+            }
+            .list-cell .content {
+                font-size: 0.7rem;
+            }
+            .status-select {
+                font-size: 0.65rem;
+                padding: 4px 8px 4px 26px;
+                max-width: 100px;
+            }
         }
-        .save-info strong {
-            font-size: 1.1rem;
+
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 0.75rem 0.5rem;
+            }
+            .app-title-group h1 {
+                font-size: 1rem;
+            }
+            .app-title-group .icon-wrapper {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+            .btn {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+            }
+            .recap-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .recap-card .value {
+                font-size: 1.3rem;
+            }
+            table.laporan {
+                font-size: 0.65rem;
+                min-width: 480px;
+            }
+            .col-status {
+                width: 80px;
+                min-width: 70px;
+            }
+            .col-keterangan {
+                width: 100px;
+                min-width: 80px;
+            }
+            .status-select {
+                font-size: 0.6rem;
+                padding: 3px 6px 3px 20px;
+                max-width: 80px;
+            }
+            .list-cell .time {
+                font-size: 0.55rem;
+                padding: 1px 6px;
+            }
+            .list-cell .content {
+                font-size: 0.62rem;
+            }
+            .keterangan-input {
+                font-size: 0.65rem;
+            }
         }
-        .save-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .btn-save {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-save:hover {
-            background: #16a34a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(34,197,94,0.3);
-        }
-        .btn-export {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-export:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-        }
-        .btn-reset {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-reset:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-        }
-        .toast-notif {
+
+        /* ─── TOAST ─── */
+        .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #22c55e;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 40px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e1a16;
+            color: #f6f4f0;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 999;
+            pointer-events: none;
+            white-space: nowrap;
         }
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
-        @media (max-width: 700px) {
-            th, td { font-size: 0.7rem; padding: 8px 4px; }
-            .status-btn { padding: 4px 8px; }
-            .save-menu { flex-direction: column; text-align: center; }
+
+        .toast i {
+            margin-right: 10px;
+            color: #f6d8b0;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>📋 Report Divisi Konten</h1>
-    <div class="sub">✅ Klik tombol untuk ubah status: <span style="background:#22c55e; color:white; padding:2px 8px; border-radius:20px;">Sudah</span> ← → <span style="background:#f97316; color:white; padding:2px 8px; border-radius:20px;">Belum</span></div>
 
-    <!-- MENU SAVE (KOLOM BARU) -->
-    <div class="save-menu">
-        <div class="save-info">
-            <strong>💾 Menu Penyimpanan</strong><br>
-            Status tersimpan otomatis, tapi kamu juga bisa simpan manual atau export laporan
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Data tersimpan</span></div>
+
+    <!-- ─── APP ─── -->
+    <div class="app-container">
+
+        <!-- HEADER -->
+        <div class="app-header">
+            <div class="app-title-group">
+                <div class="icon-wrapper"><i class="fas fa-clipboard-list"></i></div>
+                <div>
+                    <h1>Laporan Harian <span>Konten</span></h1>
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:2px;">
+                        <span class="sub"><i class="fas fa-utensils" style="margin-right:4px;"></i>Pawon Mbah Gito</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="date-picker-wrap">
+                    <i class="fas fa-calendar-day"></i>
+                    <input type="date" id="reportDate" />
+                </div>
+                <button class="btn btn-outline" onclick="resetToday()" title="Reset semua status & keterangan hari ini">
+                    <i class="fas fa-undo-alt"></i> Reset Hari
+                </button>
+            </div>
         </div>
-        <div class="save-buttons">
-            <button class="btn-save" onclick="manualSave()">💾 Simpan Sekarang</button>
-            <button class="btn-export" onclick="exportReport()">📄 Export Laporan (TXT)</button>
-            <button class="btn-reset" onclick="resetAllData()">🔄 Reset Semua Status</button>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <span class="badge-count"><i class="far fa-clock"></i> <span id="totalItems">38</span> item</span>
+                <span class="badge-count" style="background:#eaf6ef;color:#1a5a38;"><i class="fas fa-check-circle"></i> <span id="countSudah">0</span> selesai</span>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn btn-success" onclick="exportCSV()"><i class="fas fa-file-csv"></i> CSV</button>
+                <button class="btn btn-warning" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="btn btn-primary" onclick="exportSpreadsheet()"><i class="fas fa-table"></i> Spreadsheet</button>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-scroll">
+            <table class="laporan" id="mainTable">
+                <thead>
+                    <tr>
+                        <th class="col-status"><i class="fas fa-circle-check" style="margin-right:6px;"></i>STATUS</th>
+                        <th class="col-list"><i class="fas fa-list-ul" style="margin-right:6px;"></i>LIST</th>
+                        <th class="col-keterangan"><i class="fas fa-pen" style="margin-right:6px;"></i>KETERANGAN</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- rows will be rendered by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- RECAP -->
+        <div class="recap-section" id="recapSection">
+            <div class="recap-header">
+                <h2><i class="fas fa-chart-simple"></i> Rekap Harian</h2>
+                <span style="font-size:0.75rem;color:#8a7a6a;" id="recapDateLabel"></span>
+            </div>
+            <div class="recap-grid" id="recapGrid">
+                <div class="recap-card"><div class="label">✅ SUDAH</div><div class="value sudah" id="rSudah">0</div></div>
+                <div class="recap-card"><div class="label">🔄 PROSES</div><div class="value proses" id="rProses">0</div></div>
+                <div class="recap-card"><div class="label">⏳ PENDING</div><div class="value pending" id="rPending">0</div></div>
+                <div class="recap-card"><div class="label">⬜ BELUM</div><div class="value belum" id="rBelum">0</div></div>
+                <div class="recap-card" style="background:#1e1a16;border-color:#1e1a16;">
+                    <div class="label" style="color:#b8aaa0;">📊 Total Item</div>
+                    <div class="value" style="color:#f6f4f0;" id="rTotal">0</div>
+                </div>
+                <div class="recap-card" style="background:#eaf6ef;border-color:#2d7a4f;">
+                    <div class="label" style="color:#1a5a38;">🎯 Penyelesaian</div>
+                    <div class="value sudah" id="rPersen">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div style="margin-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:0.7rem;color:#b8aaa0;border-top:1px solid #ede9e3;padding-top:1rem;">
+            <span><i class="fas fa-database"></i> Data tersimpan otomatis di peramban Anda.</span>
+            <span><i class="fas fa-print"></i> Klik <strong>CSV</strong> atau <strong>PDF</strong> untuk ekspor.</span>
         </div>
     </div>
 
-    <!-- 1. STORY INSTAGRAM (setiap jam 07.00 - 17.00) untuk 2 akun -->
-    <h2>📸 Story Instagram (per jam)</h2>
-    <p style="font-size:0.8rem; margin-top:-10px;">Akun: Pawon Mbah Gito & Warung Mbah Uti — tiap jam 07.00 s/d 17.00</p>
-    <table id="table-story">
-        <thead>
-            <tr><th>Jam</th><th>Akun</th><th>Status</th><th>Aksi</th></tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DATA DEFINISI
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    <!-- 2. FEED INSTAGRAM (Selasa & Jumat) untuk 2 akun -->
-    <h2>📷 Feed Instagram</h2>
-    <p style="font-size:0.8rem; margin-top:-10px;">Setiap Selasa & Jumat (2 akun: Pawon Mbah Gito & Warung Mbah Uti)</p>
-    <table id="table-feed">
-        <thead><tr><th>Hari</th><th>Akun</th><th>Status</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-    </table>
+        const LIST_ITEMS = [
+            { time: '07.00', content: 'Opening (Pawon Mbah Gito Sudah Buka)' },
+            { time: '07.15', content: 'Menu Prasmanan' },
+            { time: '07.30', content: 'Customer Sarapan' },
+            { time: '07.45', content: 'Suasana Pagi' },
+            { time: '08.00', content: 'Warung Mbah Uti' },
+            { time: '08.15', content: 'Barista Menyiapkan Minuman' },
+            { time: '08.30', content: 'ASMR Cooking' },
+            { time: '08.45', content: 'Momen Sarapan Keluarga' },
+            { time: '09.00', content: 'Aneka Jajanan Tradisional' },
+            { time: '09.15', content: 'Proses Penyajian Prasmanan' },
+            { time: '09.30', content: 'Menu Favorit Hari Ini' },
+            { time: '09.45', content: 'Pelayanan Ramah kepada Customer' },
+            { time: '10.00', content: 'Suasana Area Resto' },
+            { time: '10.15', content: 'Aneka Jenang Tradisional' },
+            { time: '10.30', content: 'Minuman Segar' },
+            { time: '10.45', content: 'Behind The Scene Dapur' },
+            { time: '11.00', content: 'Persiapan Makan Siang' },
+            { time: '11.15', content: 'Menu Lauk Andalan' },
+            { time: '11.30', content: 'Antrean Customer Makan Siang' },
+            { time: '11.45', content: 'ASMR Pengambilan Prasmanan' },
+            { time: '12.00', content: 'Momen Makan Siang Bersama' },
+            { time: '12.15', content: 'Menu Sayur Nusantara' },
+            { time: '12.30', content: 'Customer Review Singkat' },
+            { time: '12.45', content: 'Suasana Ramai Jam Makan Siang' },
+            { time: '13.00', content: 'Upload Konten TikTok' },
+            { time: '13.15', content: 'Menu Minuman Favorit' },
+            { time: '13.30', content: 'Dessert & Jenang' },
+            { time: '13.45', content: 'Detail Interior Bernuansa Jawa' },
+            { time: '14.00', content: 'Aktivitas Karyawan' },
+            { time: '14.15', content: 'Spot Foto Estetik' },
+            { time: '14.30', content: 'Merchandise Pawon Mbah Gito' },
+            { time: '14.45', content: 'Testimoni Customer' },
+            { time: '15.00', content: 'Suasana Sore Hari' },
+            { time: '15.15', content: 'Coffee Time di Pawon' },
+            { time: '15.30', content: 'Snack Tradisional' },
+            { time: '15.45', content: 'ASMR Pembuatan Minuman' },
+            { time: '16.00', content: 'Upload YouTube Shorts' }
+        ];
 
-    <!-- 3. TIKTOK (Senin, Rabu, Kamis, Sabtu, Minggu) -->
-    <h2>🎵 TikTok</h2>
-    <p style="font-size:0.8rem; margin-top:-10px;">Hari: Senin, Rabu, Kamis, Sabtu, Minggu</p>
-    <table id="table-tiktok">
-        <thead><tr><th>Hari</th><th>Platform</th><th>Status</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-    </table>
+        const STATUS_OPTIONS = ['SUDAH', 'PROSES', 'PENDING', 'BELUM'];
+        const STORAGE_KEY = 'laporan_harian_konten_data';
 
-    <!-- TABEL KETERANGAN HARI DAN TANGGAL (DI BAGIAN BAWAH) -->
-    <h2>📅 Keterangan Hari & Tanggal</h2>
-    <table class="hari-tanggal-table" id="table-hari-tanggal">
-        <thead>
-            <tr><th>Hari</th><th>Tanggal</th><th>Keterangan</th></tr>
-        </thead>
-        <tbody id="tbody-hari-tanggal">
-            <!-- Data akan diisi oleh JavaScript secara dinamis -->
-        </tbody>
-    </table>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  STATE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    <div class="footer-note">
-        💾 Data tersimpan secara otomatis di localStorage browser. Refresh tetap aman.<br>
-        📌 Klik "Simpan Sekarang" untuk menyimpan manual, atau "Export Laporan" untuk mendownload file laporan.
-    </div>
-</div>
+        let currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        let allData = {}; // { '2026-07-05': [ {status, keterangan}, ... ] }
 
-<script>
-    // ---------- DATA AWAL ----------
-    // 1. Story: jam 07-17 (11 jam) x 2 akun = 22 task
-    const jamList = [];
-    for (let i = 7; i <= 17; i++) {
-        jamList.push(`${i.toString().padStart(2,'0')}:00`);
-    }
-    const akunStory = ["Pawon Mbah Gito", "Warung Mbah Uti"];
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  INIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    // 2. Feed: hari Selasa & Jumat, untuk 2 akun
-    const hariFeed = ["Selasa", "Jumat"];
-    const akunFeed = ["Pawon Mbah Gito", "Warung Mbah Uti"];
+        document.addEventListener('DOMContentLoaded', () => {
+            // set date picker
+            const dateInput = document.getElementById('reportDate');
+            dateInput.value = currentDate;
+            dateInput.max = new Date().toISOString().split('T')[0];
 
-    // 3. TikTok: hari Senin, Rabu, Kamis, Sabtu, Minggu
-    const hariTiktok = ["Senin", "Rabu", "Kamis", "Sabtu", "Minggu"];
+            // load from storage
+            loadFromStorage();
 
-    // Key localStorage
-    const STORAGE_KEY = "report_konten_divisi";
+            // render
+            renderTable();
 
-    // Inisialisasi default status (semua false = belum)
-    function getDefaultData() {
-        let data = {
-            story: {},
-            feed: {},
-            tiktok: {}
-        };
-        // story
-        for (let jam of jamList) {
-            for (let akun of akunStory) {
-                data.story[`${jam}|${akun}`] = false;
-            }
-        }
-        // feed
-        for (let hari of hariFeed) {
-            for (let akun of akunFeed) {
-                data.feed[`${hari}|${akun}`] = false;
-            }
-        }
-        // tiktok
-        for (let hari of hariTiktok) {
-            data.tiktok[`${hari}|tiktok`] = false;
-        }
-        return data;
-    }
+            // update recap
+            updateRecap();
 
-    // Load data dari localStorage atau default
-    function loadData() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
+            // event listeners
+            dateInput.addEventListener('change', (e) => {
+                currentDate = e.target.value;
+                renderTable();
+                updateRecap();
+                updateRecapDateLabel();
+            });
+
+            // auto-save on any change (debounced via events)
+            document.addEventListener('change', (e) => {
+                if (e.target.closest('.status-select') || e.target.closest('.keterangan-input')) {
+                    saveToStorage();
+                    updateRecap();
+                }
+            });
+
+            document.addEventListener('input', (e) => {
+                if (e.target.closest('.keterangan-input')) {
+                    // save after typing (debounced)
+                    clearTimeout(window._saveTimeout);
+                    window._saveTimeout = setTimeout(() => {
+                        saveToStorage();
+                        updateRecap();
+                    }, 400);
+                }
+            });
+
+            updateRecapDateLabel();
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  STORAGE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function loadFromStorage() {
             try {
-                return JSON.parse(stored);
-            } catch(e) { return getDefaultData(); }
-        } else {
-            return getDefaultData();
-        }
-    }
-
-    let reportData = loadData();
-
-    function saveData() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(reportData));
-        showToast("✅ Data berhasil disimpan!", "#22c55e");
-    }
-
-    function manualSave() {
-        saveData();
-    }
-
-    function showToast(message, bgColor = "#22c55e") {
-        const toast = document.createElement("div");
-        toast.className = "toast-notif";
-        toast.textContent = message;
-        toast.style.backgroundColor = bgColor;
-        document.body.appendChild(toast);
-        setTimeout(() => {
-            toast.remove();
-        }, 2000);
-    }
-
-    function exportReport() {
-        let reportText = "=== LAPORAN DIVISI KONTEN ===\n";
-        reportText += `Tanggal Export: ${new Date().toLocaleString('id-ID')}\n\n`;
-        
-        // Story Instagram
-        reportText += "📸 STORY INSTAGRAM (per jam 07.00-17.00)\n";
-        reportText += "Akun: Pawon Mbah Gito & Warung Mbah Uti\n";
-        for (let jam of jamList) {
-            for (let akun of akunStory) {
-                const key = `${jam}|${akun}`;
-                const isDone = reportData.story[key] || false;
-                reportText += `- ${jam} - ${akun}: ${isDone ? "✅ SUDAH" : "⏳ BELUM"}\n`;
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    allData = JSON.parse(raw);
+                } else {
+                    allData = {};
+                }
+            } catch (_) {
+                allData = {};
+            }
+            // ensure current date has data
+            if (!allData[currentDate]) {
+                allData[currentDate] = LIST_ITEMS.map(() => ({
+                    status: 'BELUM',
+                    keterangan: ''
+                }));
+                saveToStorage();
             }
         }
-        
-        // Feed Instagram
-        reportText += "\n📷 FEED INSTAGRAM\n";
-        for (let hari of hariFeed) {
-            for (let akun of akunFeed) {
-                const key = `${hari}|${akun}`;
-                const isDone = reportData.feed[key] || false;
-                reportText += `- ${hari} - ${akun}: ${isDone ? "✅ SUDAH" : "⏳ BELUM"}\n`;
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+            } catch (_) { /* ignore */ }
+            // update count badge
+            updateRecap();
+        }
+
+        function getDayData() {
+            if (!allData[currentDate]) {
+                allData[currentDate] = LIST_ITEMS.map(() => ({
+                    status: 'BELUM',
+                    keterangan: ''
+                }));
+                saveToStorage();
             }
+            return allData[currentDate];
         }
-        
-        // TikTok
-        reportText += "\n🎵 TIKTOK\n";
-        for (let hari of hariTiktok) {
-            const key = `${hari}|tiktok`;
-            const isDone = reportData.tiktok[key] || false;
-            reportText += `- ${hari}: ${isDone ? "✅ SUDAH" : "⏳ BELUM"}\n`;
-        }
-        
-        // Statistik
-        let totalTasks = 0;
-        let completedTasks = 0;
-        
-        for (let key in reportData.story) {
-            totalTasks++;
-            if (reportData.story[key]) completedTasks++;
-        }
-        for (let key in reportData.feed) {
-            totalTasks++;
-            if (reportData.feed[key]) completedTasks++;
-        }
-        for (let key in reportData.tiktok) {
-            totalTasks++;
-            if (reportData.tiktok[key]) completedTasks++;
-        }
-        
-        reportText += "\n📊 STATISTIK\n";
-        reportText += `Total Tugas: ${totalTasks}\n`;
-        reportText += `Tugas Selesai: ${completedTasks}\n`;
-        reportText += `Progress: ${Math.round((completedTasks/totalTasks)*100)}%\n`;
-        
-        // Download file
-        const blob = new Blob([reportText], { type: "text/plain" });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.download = `laporan_konten_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        
-        showToast("📄 Laporan berhasil diexport!", "#3b82f6");
-    }
-    
-    function resetAllData() {
-        if (confirm("⚠️ PERINGATAN: Ini akan mereset SEMUA status menjadi BELUM. Yakin ingin melanjutkan?")) {
-            reportData = getDefaultData();
-            saveData();
-            renderAllTables();
-            showToast("🔄 Semua status telah direset!", "#ef4444");
-        }
-    }
 
-    function toggleStatus(category, key) {
-        if (reportData[category] && reportData[category][key] !== undefined) {
-            reportData[category][key] = !reportData[category][key];
-            saveData();
-            renderAllTables();  // re-render semua tabel
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  RENDER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const dayData = getDayData();
+            let html = '';
+
+            LIST_ITEMS.forEach((item, idx) => {
+                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                const status = row.status || 'BELUM';
+                const keterangan = row.keterangan || '';
+
+                // status class for styling
+                const statusClass = 'status-' + status.toLowerCase();
+
+                html += `
+                    <tr>
+                        <td class="col-status">
+                            <select class="status-select ${statusClass}" data-index="${idx}" aria-label="Status">
+                                ${STATUS_OPTIONS.map(opt =>
+                                    `<option value="${opt}" ${opt === status ? 'selected' : ''}>${opt}</option>`
+                                ).join('')}
+                            </select>
+                        </td>
+                        <td class="col-list">
+                            <div class="list-cell">
+                                <span class="time">${item.time}</span>
+                                <span class="content">${item.content}</span>
+                            </div>
+                        </td>
+                        <td class="col-keterangan">
+                            <input class="keterangan-input" type="text" data-index="${idx}"
+                                   placeholder="Catatan…" value="${escapeHtml(keterangan)}" />
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+            // attach events
+            tbody.querySelectorAll('.status-select').forEach(sel => {
+                sel.addEventListener('change', (e) => {
+                    const idx = parseInt(e.target.dataset.index);
+                    const dayData2 = getDayData();
+                    if (dayData2[idx]) {
+                        dayData2[idx].status = e.target.value;
+                        // update class
+                        e.target.className = 'status-select status-' + e.target.value.toLowerCase();
+                        saveToStorage();
+                        updateRecap();
+                    }
+                });
+            });
+
+            tbody.querySelectorAll('.keterangan-input').forEach(inp => {
+                inp.addEventListener('change', (e) => {
+                    const idx = parseInt(e.target.dataset.index);
+                    const dayData2 = getDayData();
+                    if (dayData2[idx]) {
+                        dayData2[idx].keterangan = e.target.value;
+                        saveToStorage();
+                        updateRecap();
+                    }
+                });
+            });
+
+            // update total items badge
+            document.getElementById('totalItems').textContent = LIST_ITEMS.length;
         }
-    }
 
-    // ========== FUNGSI UNTUK MENGISI TABEL HARI & TANGGAL ==========
-    function getDayNameInIndonesian(dayIndex) {
-        const hariIndonesia = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-        return hariIndonesia[dayIndex];
-    }
-
-    function formatDate(date) {
-        const tgl = date.getDate().toString().padStart(2, '0');
-        const bln = (date.getMonth() + 1).toString().padStart(2, '0');
-        const thn = date.getFullYear();
-        return `${tgl}/${bln}/${thn}`;
-    }
-
-    function renderHariTanggalTable() {
-        const tbody = document.getElementById("tbody-hari-tanggal");
-        tbody.innerHTML = "";
-        
-        // Ambil tanggal hari ini
-        const today = new Date();
-        
-        // Tampilkan 7 hari ke depan (termasuk hari ini) untuk perencanaan
-        for (let i = 0; i < 7; i++) {
-            const currentDate = new Date(today);
-            currentDate.setDate(today.getDate() + i);
-            
-            const hari = getDayNameInIndonesian(currentDate.getDay());
-            const tanggal = formatDate(currentDate);
-            
-            // Tentukan keterangan berdasarkan hari
-            let keterangan = "";
-            if (hari === "Selasa" || hari === "Jumat") {
-                keterangan = "📷 Feed Instagram (2 akun)";
-            } else if (hari === "Senin" || hari === "Rabu" || hari === "Kamis" || hari === "Sabtu" || hari === "Minggu") {
-                keterangan = "🎵 Upload TikTok";
-            } else {
-                keterangan = "📸 Story Instagram (per jam)";
-            }
-            
-            // Tambahkan juga info story (setiap hari ada story)
-            if (keterangan.includes("Feed") || keterangan.includes("TikTok")) {
-                keterangan += " + 📸 Story Instagram per jam";
-            } else {
-                keterangan = "📸 Story Instagram per jam";
-            }
-            
-            // Tandai hari ini dengan style berbeda
-            const row = tbody.insertRow();
-            const cellHari = row.insertCell(0);
-            const cellTanggal = row.insertCell(1);
-            const cellKeterangan = row.insertCell(2);
-            
-            cellHari.textContent = hari;
-            cellTanggal.textContent = tanggal;
-            cellKeterangan.textContent = keterangan;
-            
-            if (i === 0) {
-                cellHari.style.fontWeight = "bold";
-                cellHari.style.color = "#f97316";
-                cellTanggal.style.fontWeight = "bold";
-                cellTanggal.style.color = "#f97316";
-                cellHari.innerHTML += " 🟢 (Hari Ini)";
-            }
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
-    }
 
-    // Render helper untuk tabel tugas
-    function renderStoryTable() {
-        const tbody = document.querySelector("#table-story tbody");
-        tbody.innerHTML = "";
-        for (let jam of jamList) {
-            for (let akun of akunStory) {
-                const key = `${jam}|${akun}`;
-                const isDone = reportData.story[key] || false;
-                const row = tbody.insertRow();
-                // kolom jam
-                const cellJam = row.insertCell(0);
-                cellJam.textContent = jam;
-                cellJam.style.fontWeight = "500";
-                // kolom akun
-                const cellAkun = row.insertCell(1);
-                cellAkun.textContent = akun;
-                // kolom status badge
-                const cellStatus = row.insertCell(2);
-                const statusSpan = document.createElement("span");
-                statusSpan.className = "badge";
-                statusSpan.textContent = isDone ? "✅ SUDAH" : "⏳ BELUM";
-                statusSpan.style.backgroundColor = isDone ? "#dcfce7" : "#fff3e3";
-                statusSpan.style.color = isDone ? "#166534" : "#9a3412";
-                cellStatus.appendChild(statusSpan);
-                // kolom aksi tombol
-                const cellAction = row.insertCell(3);
-                const btn = document.createElement("button");
-                btn.textContent = isDone ? "Tandai Belum" : "Tandai Selesai";
-                btn.className = "status-btn" + (isDone ? " done" : " notdone");
-                btn.onclick = (function(cat, k) { return function() { toggleStatus(cat, k); }; })("story", key);
-                cellAction.appendChild(btn);
-            }
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  RECAP
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function updateRecap() {
+            const dayData = getDayData();
+            let countSudah = 0,
+                countProses = 0,
+                countPending = 0,
+                countBelum = 0;
+
+            dayData.forEach(row => {
+                const s = (row.status || 'BELUM').toUpperCase();
+                if (s === 'SUDAH') countSudah++;
+                else if (s === 'PROSES') countProses++;
+                else if (s === 'PENDING') countPending++;
+                else countBelum++;
+            });
+
+            const total = dayData.length;
+            const persen = total > 0 ? Math.round((countSudah / total) * 100) : 0;
+
+            document.getElementById('rSudah').textContent = countSudah;
+            document.getElementById('rProses').textContent = countProses;
+            document.getElementById('rPending').textContent = countPending;
+            document.getElementById('rBelum').textContent = countBelum;
+            document.getElementById('rTotal').textContent = total;
+            document.getElementById('rPersen').textContent = persen + '%';
+            document.getElementById('countSudah').textContent = countSudah;
         }
-    }
 
-    function renderFeedTable() {
-        const tbody = document.querySelector("#table-feed tbody");
-        tbody.innerHTML = "";
-        for (let hari of hariFeed) {
-            for (let akun of akunFeed) {
-                const key = `${hari}|${akun}`;
-                const isDone = reportData.feed[key] || false;
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = hari;
-                row.insertCell(1).textContent = akun;
-                const cellStatus = row.insertCell(2);
-                const statusSpan = document.createElement("span");
-                statusSpan.className = "badge";
-                statusSpan.textContent = isDone ? "✅ SUDAH" : "⏳ BELUM";
-                statusSpan.style.backgroundColor = isDone ? "#dcfce7" : "#fff3e3";
-                cellStatus.appendChild(statusSpan);
-                const cellAction = row.insertCell(3);
-                const btn = document.createElement("button");
-                btn.textContent = isDone ? "Tandai Belum" : "Tandai Selesai";
-                btn.className = "status-btn" + (isDone ? " done" : " notdone");
-                btn.onclick = (function(cat, k) { return function() { toggleStatus(cat, k); }; })("feed", key);
-                cellAction.appendChild(btn);
-            }
+        function updateRecapDateLabel() {
+            const d = new Date(currentDate + 'T00:00:00');
+            const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('recapDateLabel').textContent = d.toLocaleDateString('id-ID', opts);
         }
-    }
 
-    function renderTiktokTable() {
-        const tbody = document.querySelector("#table-tiktok tbody");
-        tbody.innerHTML = "";
-        for (let hari of hariTiktok) {
-            const key = `${hari}|tiktok`;
-            const isDone = reportData.tiktok[key] || false;
-            const row = tbody.insertRow();
-            row.insertCell(0).textContent = hari;
-            row.insertCell(1).textContent = "TikTok";
-            const cellStatus = row.insertCell(2);
-            const statusSpan = document.createElement("span");
-            statusSpan.className = "badge";
-            statusSpan.textContent = isDone ? "✅ SUDAH" : "⏳ BELUM";
-            statusSpan.style.backgroundColor = isDone ? "#dcfce7" : "#fff3e3";
-            cellStatus.appendChild(statusSpan);
-            const cellAction = row.insertCell(3);
-            const btn = document.createElement("button");
-            btn.textContent = isDone ? "Tandai Belum" : "Tandai Selesai";
-            btn.className = "status-btn" + (isDone ? " done" : " notdone");
-            btn.onclick = (function(cat, k) { return function() { toggleStatus(cat, k); }; })("tiktok", key);
-            cellAction.appendChild(btn);
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  RESET
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function resetToday() {
+            if (!confirm('Reset semua status & keterangan untuk hari ini?')) return;
+            allData[currentDate] = LIST_ITEMS.map(() => ({
+                status: 'BELUM',
+                keterangan: ''
+            }));
+            saveToStorage();
+            renderTable();
+            updateRecap();
+            showToast('Hari ini telah direset');
         }
-    }
 
-    function renderAllTables() {
-        renderStoryTable();
-        renderFeedTable();
-        renderTiktokTable();
-        renderHariTanggalTable();  // Render tabel hari & tanggal
-    }
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  EXPORT: CSV
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    // inisialisasi render
-    renderAllTables();
-</script>
+        function exportCSV() {
+            const dayData = getDayData();
+            let csv = '\uFEFF'; // BOM for Excel
+            csv += 'STATUS,LIST,KETERANGAN\n';
+
+            LIST_ITEMS.forEach((item, idx) => {
+                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                const status = row.status || 'BELUM';
+                const ket = (row.keterangan || '').replace(/,/g, ';');
+                const label = `${item.time} - ${item.content}`;
+                csv += `${status},"${label}",${ket}\n`;
+            });
+
+            // recap
+            csv += '\n--- REKAP ---\n';
+            const rSudah = document.getElementById('rSudah').textContent;
+            const rProses = document.getElementById('rProses').textContent;
+            const rPending = document.getElementById('rPending').textContent;
+            const rBelum = document.getElementById('rBelum').textContent;
+            const rTotal = document.getElementById('rTotal').textContent;
+            const rPersen = document.getElementById('rPersen').textContent;
+            csv += `SUDAH,${rSudah}\n`;
+            csv += `PROSES,${rProses}\n`;
+            csv += `PENDING,${rPending}\n`;
+            csv += `BELUM,${rBelum}\n`;
+            csv += `Total,${rTotal}\n`;
+            csv += `Penyelesaian,${rPersen}\n`;
+
+            downloadFile(csv, `laporan_harian_${currentDate}.csv`, 'text/csv;charset=utf-8');
+            showToast('CSV berhasil diekspor');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  EXPORT: PDF (menggunakan jsPDF + autoTable)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function exportPDF() {
+            const dayData = getDayData();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4');
+
+            // header
+            doc.setFontSize(16);
+            doc.setTextColor(30, 26, 22);
+            doc.text('Laporan Harian Konten - Pawon Mbah Gito', 14, 20);
+
+            const d = new Date(currentDate + 'T00:00:00');
+            const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            doc.setFontSize(11);
+            doc.setTextColor(100, 90, 80);
+            doc.text(`Tanggal: ${dateStr}`, 14, 28);
+
+            // table data
+            const tableData = LIST_ITEMS.map((item, idx) => {
+                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                return [
+                    row.status || 'BELUM',
+                    `${item.time} - ${item.content}`,
+                    row.keterangan || ''
+                ];
+            });
+
+            doc.autoTable({
+                head: [
+                    ['STATUS', 'LIST', 'KETERANGAN']
+                ],
+                body: tableData,
+                startY: 34,
+                styles: { fontSize: 8, cellPadding: 3 },
+                headStyles: { fillColor: [30, 26, 22], textColor: [255, 255, 255], fontSize: 9, fontStyle: 'bold' },
+                columnStyles: {
+                    0: { cellWidth: 28 },
+                    1: { cellWidth: 98 },
+                    2: { cellWidth: 70 }
+                },
+                didDrawPage: function(data) {
+                    // footer
+                    const pageCount = doc.internal.getNumberOfPages();
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 140, 130);
+                    doc.text(`Halaman ${data.pageNumber} dari ${pageCount}`, 14, doc.internal.pageSize.height - 8);
+                }
+            });
+
+            // recap after table
+            const finalY = doc.lastAutoTable.finalY + 8;
+            doc.setFontSize(11);
+            doc.setTextColor(30, 26, 22);
+            doc.text('📊 REKAP HARIAN', 14, finalY);
+
+            const rSudah = document.getElementById('rSudah').textContent;
+            const rProses = document.getElementById('rProses').textContent;
+            const rPending = document.getElementById('rPending').textContent;
+            const rBelum = document.getElementById('rBelum').textContent;
+            const rTotal = document.getElementById('rTotal').textContent;
+            const rPersen = document.getElementById('rPersen').textContent;
+
+            const recapRows = [
+                ['✅ SUDAH', rSudah],
+                ['🔄 PROSES', rProses],
+                ['⏳ PENDING', rPending],
+                ['⬜ BELUM', rBelum],
+                ['📊 Total Item', rTotal],
+                ['🎯 Penyelesaian', rPersen]
+            ];
+
+            doc.autoTable({
+                body: recapRows,
+                startY: finalY + 4,
+                styles: { fontSize: 9, cellPadding: 4 },
+                columnStyles: {
+                    0: { cellWidth: 60, fontStyle: 'bold' },
+                    1: { cellWidth: 30, halign: 'center' }
+                },
+                theme: 'plain',
+                didDrawPage: function(data) {
+                    const pageCount = doc.internal.getNumberOfPages();
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 140, 130);
+                    doc.text(`Halaman ${data.pageNumber} dari ${pageCount}`, 14, doc.internal.pageSize.height - 8);
+                }
+            });
+
+            doc.save(`laporan_harian_${currentDate}.pdf`);
+            showToast('PDF berhasil diekspor');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  EXPORT: Spreadsheet (XLS-like via HTML table)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function exportSpreadsheet() {
+            const dayData = getDayData();
+
+            let html = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office"
+                      xmlns:x="urn:schemas-microsoft-com:office:excel"
+                      xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="UTF-8">
+                <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+                <x:Name>Laporan</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+                </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+                <style>
+                    table { border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11px; }
+                    th { background: #1e1a16; color: #fff; font-weight: bold; padding: 8px 12px; border: 1px solid #333; }
+                    td { padding: 6px 12px; border: 1px solid #ccc; }
+                    .status-sudah { background: #eaf6ef; }
+                    .status-proses { background: #f6eee6; }
+                    .status-pending { background: #fcf3e0; }
+                    .status-belum { background: #f6f4f0; }
+                </style>
+                </head><body>
+                <h2>Laporan Harian Konten - Pawon Mbah Gito</h2>
+                <p><strong>Tanggal:</strong> ${new Date(currentDate + 'T00:00:00').toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' })}</p>
+                <table>
+                    <thead><tr><th>STATUS</th><th>LIST</th><th>KETERANGAN</th></tr></thead>
+                    <tbody>
+            `;
+
+            LIST_ITEMS.forEach((item, idx) => {
+                const row = dayData[idx] || { status: 'BELUM', keterangan: '' };
+                const status = row.status || 'BELUM';
+                const ket = (row.keterangan || '');
+                const cls = 'status-' + status.toLowerCase();
+                html += `
+                    <tr class="${cls}">
+                        <td>${status}</td>
+                        <td>${item.time} - ${item.content}</td>
+                        <td>${ket}</td>
+                    </tr>
+                `;
+            });
+
+            // recap
+            const rSudah = document.getElementById('rSudah').textContent;
+            const rProses = document.getElementById('rProses').textContent;
+            const rPending = document.getElementById('rPending').textContent;
+            const rBelum = document.getElementById('rBelum').textContent;
+            const rTotal = document.getElementById('rTotal').textContent;
+            const rPersen = document.getElementById('rPersen').textContent;
+
+            html += `
+                    </tbody>
+                </table>
+                <br/>
+                <h3>📊 Rekap Harian</h3>
+                <table>
+                    <tr><th>Kategori</th><th>Jumlah</th></tr>
+                    <tr><td>✅ SUDAH</td><td>${rSudah}</td></tr>
+                    <tr><td>🔄 PROSES</td><td>${rProses}</td></tr>
+                    <tr><td>⏳ PENDING</td><td>${rPending}</td></tr>
+                    <tr><td>⬜ BELUM</td><td>${rBelum}</td></tr>
+                    <tr><td>📊 Total Item</td><td>${rTotal}</td></tr>
+                    <tr><td>🎯 Penyelesaian</td><td>${rPersen}</td></tr>
+                </table>
+                <br/>
+                <p><em>Dibuat pada: ${new Date().toLocaleString('id-ID')}</em></p>
+                </body></html>
+            `;
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `laporan_harian_${currentDate}.xls`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Spreadsheet berhasil diekspor (.xls)');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  UTILITY
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function downloadFile(content, filename, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function showToast(msg) {
+            const el = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            el.classList.add('show');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+        }
+
+        // expose to global for inline onclick
+        window.resetToday = resetToday;
+        window.exportCSV = exportCSV;
+        window.exportPDF = exportPDF;
+        window.exportSpreadsheet = exportSpreadsheet;
+    </script>
+
 </body>
 </html>
